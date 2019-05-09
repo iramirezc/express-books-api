@@ -1,0 +1,16 @@
+# directories
+.git
+node_modules
+scripts
+
+# root files
+.dockerignore
+.gitignore
+.nvmrc
+Dockerfile
+yarn.lock
+
+# wildcards
+**/*.md
+**/*.log
+**/*.sh
