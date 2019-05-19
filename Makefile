@@ -5,4 +5,7 @@ install:
 	docker-compose -f docker-compose.build.yaml run --rm install
 
 dev:
-	docker-compose up
+	docker-compose up dev
+
+debug:
+	docker-compose up debug

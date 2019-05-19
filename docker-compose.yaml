@@ -1,15 +1,27 @@
-version: '3'
+version: '2'
 
 services:
-  dev:
+  base:
     image: node:10.15.3-alpine
     volumes:
       - books_node_modules:/usr/src/app/node_modules
       - .:/usr/src/app
     working_dir: /usr/src/app
+
+  dev:
+    extends:
+      service: base
     command: yarn dev
     ports:
       - 8080:8080
+
+  debug:
+    extends:
+      service: base
+    command: yarn debug
+    ports:
+      - 8080:8080
+      - 9229:9229
 
 volumes:
   books_node_modules:
