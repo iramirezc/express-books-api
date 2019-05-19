@@ -8,6 +8,7 @@ scripts
 .gitignore
 .nvmrc
 Dockerfile
+Makefile
 yarn.lock
 
 # wildcards

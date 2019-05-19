@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  dev:
+    image: node:10.15.3-alpine
+    volumes:
+      - books_node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: yarn dev
+    ports:
+      - 8080:8080
+
+volumes:
+  books_node_modules:
+    external: true
