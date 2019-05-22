@@ -1,5 +1,6 @@
 # directories
 .git
+.vscode
 node_modules
 scripts
 
@@ -12,6 +13,7 @@ Makefile
 yarn.lock
 
 # wildcards
+*.yaml
 **/*.md
 **/*.log
 **/*.sh
