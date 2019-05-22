@@ -31,4 +31,4 @@ EXPOSE 8080
 # First off this reduces the number of processes running inside of your container.
 # Secondly it causes exit signals such as SIGTERM and SIGINT to be received by the Node.js process instead of npm swallowing them.
 # See: https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#cmd
-CMD [ "node", "server.js"]
+CMD [ "node", "index.js"]

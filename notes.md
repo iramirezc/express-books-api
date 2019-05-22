@@ -62,7 +62,12 @@ command: sh -c "yarn install && yarn dev"
 
 * [Linux `chwon` command](https://linuxize.com/post/linux-chown-command/)
 
+### Testing
+
+* [An Overview of JavaScript Testing in 2019](https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2019-264e19514d0a)
+* [Testing A Node/Express Application With Mocha & Chai](https://medium.com/@asciidev/testing-a-node-express-application-with-mocha-chai-9592d41c0083)
+* [Express Routes: A TDD Approach](https://medium.com/@jodylecompte/express-routes-a-tdd-approach-1e12a0799352)
+
 ## Questions?
 
 * Is it ok to ignore the `yarn.lock` file?
-* How to use nodemon with Docker or something similar?
