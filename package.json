@@ -8,8 +8,9 @@
     "dev": "nodemon index.js",
     "debug": "nodemon --inspect-brk=0.0.0.0:9229 index.js",
     "test": "yarn test:unit && yarn test:functional",
-    "test:unit": "NODE_ENV=test mocha './server/**/*.test.js'",
-    "test:functional": "NODE_ENV=test mocha './tests/**/*.test.js'"
+    "test:unit": "NODE_ENV=test mocha server/**/*.test.js",
+    "test:functional": "NODE_ENV=test nyc --reporter=html --reporter=text mocha -R nyan tests/**/*.test.js",
+    "test:sanity": "NODE_ENV=test mocha tests/**/*.test.js --grep 'sanity'"
   },
   "author": "iramirezc@live.com.mx",
   "license": "ISC",
@@ -22,7 +23,9 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.1.4",
+    "node-mocks-http": "^1.7.5",
     "nodemon": "^1.19.0",
+    "nyc": "^14.1.1",
     "sinon": "^7.3.2"
   },
   "standard": {

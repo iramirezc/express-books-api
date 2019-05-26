@@ -8,7 +8,7 @@ chai.use(require('chai-http'))
 
 describe('Hello Route - Functional Test', () => {
   describe('GET /', () => {
-    it('should respond with Hello World', (done) => {
+    it('should respond with Hello World #sanity', (done) => {
       chai.request(server)
         .get('/')
         .end((err, res) => {

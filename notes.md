@@ -67,6 +67,8 @@ command: sh -c "yarn install && yarn dev"
 * [An Overview of JavaScript Testing in 2019](https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2019-264e19514d0a)
 * [Testing A Node/Express Application With Mocha & Chai](https://medium.com/@asciidev/testing-a-node-express-application-with-mocha-chai-9592d41c0083)
 * [Express Routes: A TDD Approach](https://medium.com/@jodylecompte/express-routes-a-tdd-approach-1e12a0799352)
+* [Test Driven Development: what it is, and what it is not.](https://medium.freecodecamp.org/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2)
+* [Node.js & JavaScript Testing Best Practices (2019)](https://medium.com/@me_37286/yoni-goldberg-javascript-nodejs-testing-best-practices-2b98924c9347)
 
 ## Questions?
 
