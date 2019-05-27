@@ -7,17 +7,18 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "debug": "nodemon --inspect-brk=0.0.0.0:9229 index.js",
-    "test": "yarn test:unit && yarn test:functional",
+    "test": "yarn test:unit && yarn test:func",
     "test:unit": "NODE_ENV=test mocha server/**/*.test.js",
-    "test:functional": "NODE_ENV=test nyc --reporter=html --reporter=text mocha -R nyan tests/**/*.test.js",
-    "test:sanity": "NODE_ENV=test mocha tests/**/*.test.js --grep 'sanity'"
+    "test:func": "NODE_ENV=test nyc --reporter=html --reporter=text mocha -R nyan --recursive",
+    "test:sanity": "NODE_ENV=test mocha --recursive --grep 'sanity'"
   },
   "author": "iramirezc@live.com.mx",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
-    "glob": "^7.1.4"
+    "glob": "^7.1.4",
+    "mongoose": "^5.5.11"
   },
   "devDependencies": {
     "chai": "^4.2.0",
@@ -30,6 +31,10 @@
   },
   "standard": {
     "globals": [
+      "after",
+      "afterEach",
+      "before",
+      "beforeEach",
       "describe",
       "it"
     ]

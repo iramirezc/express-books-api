@@ -9,3 +9,6 @@ dev:
 
 debug:
 	docker-compose up debug
+
+test-debug:
+	yarn test:unit --inspect-brk --watch --no-timeout
