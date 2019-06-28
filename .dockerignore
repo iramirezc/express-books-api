@@ -9,7 +9,9 @@ scripts
 # root files
 .dockerignore
 .gitignore
+.markdownlint.json
 .nvmrc
+.nycrc
 Dockerfile
 Makefile
 yarn.lock
