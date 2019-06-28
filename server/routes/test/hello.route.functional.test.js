@@ -1,6 +1,6 @@
 const chai = require('chai')
 
-const server = require('../../server/app')
+const server = require('../../app')
 
 const expect = chai.expect
 

@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-expressions */
 const chai = require('chai')
-chai.use(require('../../test/helpers/book.model.helper'))
 const expect = chai.expect
 const mongoose = require('mongoose')
 
-const Book = require('./book.model')
+const Book = require('../book.model')
+
+chai.use(require('../../test/helpers/book.model.helper'))
 
 describe('Book Model - Unit Tests', () => {
   afterEach(() => {

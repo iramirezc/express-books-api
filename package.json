@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon index.js --trace-sync-io",
     "debug": "nodemon --inspect-brk=0.0.0.0:9229 index.js",
-    "test": "yarn test:unit && yarn test:func",
-    "test:unit": "NODE_ENV=test mocha server/**/*.test.js",
-    "test:func": "NODE_ENV=test nyc --reporter=html --reporter=text mocha -R nyan --recursive",
-    "test:sanity": "NODE_ENV=test mocha --recursive --grep 'sanity'"
+    "test": "yarn test:unit -R dot && yarn test:func -R dot",
+    "test:unit": "NODE_ENV=test mocha 'server/**/*.unit.test.js'",
+    "test:func": "NODE_ENV=test mocha 'server/**/*.functional.test.js'",
+    "test:cov": "NODE_ENV=test nyc mocha -R nyan 'server/**/*.test.js'",
+    "test:sanity": "NODE_ENV=test mocha -R list --grep 'sanity' 'server/**/*.test.js'"
   },
   "author": "iramirezc@live.com.mx",
   "license": "ISC",

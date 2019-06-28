@@ -1,4 +1,4 @@
-const Book = require('../../server/models/book.model')
+const Book = require('../../models/book.model')
 
 module.exports = (chai, utils) => {
   const Assertion = chai.Assertion

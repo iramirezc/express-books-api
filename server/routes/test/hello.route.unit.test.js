@@ -2,7 +2,7 @@ const expect = require('chai').expect
 const httpMocks = require('node-mocks-http')
 const sinon = require('sinon')
 
-const HelloRoute = require('./hello.route')
+const HelloRoute = require('../hello.route')
 
 describe('Hello Route - Unit Tests', () => {
   afterEach(() => {
