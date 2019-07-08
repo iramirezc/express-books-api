@@ -11,6 +11,10 @@ const BookSchema = new mongoose.Schema({
     type: [String],
     validate: [minLengthOf(1), 'Path `{PATH}` should have at least one element.']
   },
+  pages: {
+    type: Number,
+    default: 0
+  },
   isbn: {
     type: String,
     default: ''
@@ -26,10 +30,6 @@ const BookSchema = new mongoose.Schema({
   edition: {
     type: String,
     default: ''
-  },
-  pages: {
-    type: Number,
-    default: 0
   },
   createdAt: {
     type: Date,
