@@ -6,6 +6,7 @@ node_modules
 
 # root files
 yarn.lock
+.markdownlint.json
 
 # wildcards
 *.log
