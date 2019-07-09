@@ -3,8 +3,8 @@ const {
   SERVER_HOST,
   SERVER_PORT
 } = require('./src/config')
-const server = require('./src/app')
 const { normalizePort } = require('./src/common/utils')
+const server = require('./src/server')
 
 const PORT = normalizePort(SERVER_PORT || '8080')
 const HOST = SERVER_HOST || '127.0.0.1'

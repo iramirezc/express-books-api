@@ -8,10 +8,10 @@
     "dev": "nodemon index.js --trace-sync-io",
     "debug": "nodemon --inspect-brk=0.0.0.0:9229 index.js",
     "test": "yarn test:unit -R dot && yarn test:func -R dot",
-    "test:unit": "NODE_ENV=test mocha 'src/**/*.unit.test.js'",
-    "test:func": "NODE_ENV=test mocha 'src/**/*.functional.test.js'",
-    "test:cov": "NODE_ENV=test nyc mocha -R nyan 'src/**/*.test.js'",
-    "test:sanity": "NODE_ENV=test mocha -R list --grep 'sanity' 'src/**/*.test.js'"
+    "test:unit": "NODE_ENV=test mocha 'src/**/*.test.js'",
+    "test:func": "NODE_ENV=test mocha 'src/**/*.spec.js'",
+    "test:cov": "NODE_ENV=test nyc mocha -R nyan 'src/**/*.@(test|spec).js'",
+    "test:sanity": "NODE_ENV=test mocha -R list --grep 'sanity' 'src/**/*.spec.js'"
   },
   "author": "iramirezc@live.com.mx",
   "license": "ISC",

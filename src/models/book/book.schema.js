@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const { minLengthOf } = require('../common/utils/mongoose.validators')
+
+const { minLengthOf } = require('../../common/utils/mongoose.validators')
 
 const BookSchema = new mongoose.Schema({
   title: {
@@ -41,6 +42,4 @@ const BookSchema = new mongoose.Schema({
   }
 })
 
-const Book = mongoose.model('Book', BookSchema)
-
-module.exports = Book
+module.exports = BookSchema
