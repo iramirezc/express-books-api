@@ -10,8 +10,8 @@
     "test": "yarn test:unit -R dot && yarn test:func -R dot",
     "test:unit": "NODE_ENV=test mocha 'src/**/*.test.js'",
     "test:func": "NODE_ENV=test mocha 'src/**/*.spec.js'",
-    "test:cov": "NODE_ENV=test nyc mocha -R nyan 'src/**/*.@(test|spec).js'",
-    "test:sanity": "NODE_ENV=test mocha -R list --grep 'sanity' 'src/**/*.spec.js'"
+    "test:cov": "NODE_ENV=test nyc mocha 'src/**/*.@(test|spec).js' -R nyan",
+    "test:sanity": "NODE_ENV=test mocha 'src/**/*.spec.js' -R list --grep 'sanity'"
   },
   "author": "iramirezc@live.com.mx",
   "license": "ISC",
@@ -19,16 +19,19 @@
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
     "glob": "^7.1.4",
+    "lodash": "^4.17.11",
     "mongoose": "^5.5.11"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "faker": "^4.1.0",
     "mocha": "^6.1.4",
     "node-mocks-http": "^1.7.5",
     "nodemon": "^1.19.0",
     "nyc": "^14.1.1",
-    "sinon": "^7.3.2"
+    "sinon": "^7.3.2",
+    "sinon-chai": "^3.3.0"
   },
   "standard": {
     "globals": [
