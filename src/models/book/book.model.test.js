@@ -1,11 +1,9 @@
-const mongoose = require('mongoose')
-
-const { expect } = require('../../test')
+const { expect, utils } = require('../../test')
 const Book = require('./book.model')
 
 describe('Book Model - Unit Tests', () => {
   afterEach(() => {
-    mongoose.deleteModel(/.+/) // delete all mongoose models to prevent OverwriteModelErrors
+    utils.deleteMongooseModels()
   })
 
   describe('instance initialization', () => {
@@ -31,7 +29,7 @@ describe('Book Model - Unit Tests', () => {
     it('should create a book with all its props and default values', () => {
       const book = new Book()
 
-      expect(book).to.have.property('_id').that.is.an.instanceOf(mongoose.Types.ObjectId)
+      expect(book).to.have.property('_id').that.is.an.objectId()
       expect(book).to.have.property('title', '')
       expect(book).to.have.property('authors').that.is.an('array').and.is.empty
       expect(book).to.have.property('pages', 0)

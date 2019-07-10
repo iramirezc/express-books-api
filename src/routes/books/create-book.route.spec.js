@@ -1,6 +1,4 @@
-const mongoose = require('mongoose')
-
-const { chai, expect, sinon } = require('../../test')
+const { chai, expect, sinon, utils } = require('../../test')
 const { MockFactory } = require('../../test/mocks')
 const server = require('../../server')
 
@@ -12,8 +10,8 @@ describe('Create Book Route - Functional Tests', () => {
   })
 
   afterEach(() => {
-    mongoose.deleteModel(/.+/)
     sinon.restore()
+    utils.deleteMongooseModels()
   })
 
   describe('POST /book', () => {

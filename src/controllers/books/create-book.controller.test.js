@@ -1,6 +1,3 @@
-const mongoose = require('mongoose')
-const { Types: { ObjectId } } = mongoose
-
 const { expect, sinon } = require('../../test')
 const { MockFactory } = require('../../test/mocks')
 const { Book } = require('../../models')
@@ -21,7 +18,6 @@ describe('Create Book Controller - Unit Tests', () => {
 
   afterEach(() => {
     sinon.restore()
-    mongoose.deleteModel(/.+/)
   })
 
   describe('success cases', () => {
@@ -42,7 +38,7 @@ describe('Create Book Controller - Unit Tests', () => {
           expect(response.json).to.have.been.calledWithMatch({
             status: 'success',
             data: {
-              _id: sinon.match.instanceOf(ObjectId),
+              _id: sinon.match.object,
               title: bookData.title,
               authors: sinon.match.array.deepEquals(bookData.authors),
               pages: bookData.pages,
