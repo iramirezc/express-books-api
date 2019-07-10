@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-expressions */
-const chai = require('chai')
-const expect = chai.expect
 const mongoose = require('mongoose')
 
+const { expect } = require('../../test')
 const Book = require('./book.model')
-
-chai.use(require('../../test/helpers/book.model.helper'))
 
 describe('Book Model - Unit Tests', () => {
   afterEach(() => {
@@ -15,7 +11,7 @@ describe('Book Model - Unit Tests', () => {
   describe('instance initialization', () => {
     it('should create an instance of a Book with all its public props', () => {
       const book = new Book()
-      const expectedProps = [
+      const expectedKeys = [
         '_id',
         'title',
         'authors',
@@ -27,12 +23,14 @@ describe('Book Model - Unit Tests', () => {
         'createdAt',
         'updatedAt'
       ]
+
       expect(book).to.be.a.book()
-      expect(book.toObject()).to.have.all.keys(expectedProps)
+      expect(book.toObject()).to.have.all.keys(expectedKeys)
     })
 
     it('should create a book with all its props and default values', () => {
       const book = new Book()
+
       expect(book).to.have.property('_id').that.is.an.instanceOf(mongoose.Types.ObjectId)
       expect(book).to.have.property('title', '')
       expect(book).to.have.property('authors').that.is.an('array').and.is.empty
@@ -45,7 +43,7 @@ describe('Book Model - Unit Tests', () => {
       expect(book).to.have.property('updatedAt').that.is.a('date')
     })
 
-    it('should create a book with the values passed in', () => {
+    it('should create a book with the values provided', () => {
       const bookData = {
         title: 'Algorithms',
         authors: ['Robert Sedgewick'],
@@ -58,6 +56,7 @@ describe('Book Model - Unit Tests', () => {
         updatedAt: new Date()
       }
       const book = new Book(bookData)
+
       expect(book).to.have.property('title', bookData.title)
       expect(book).to.have.property('authors').that.deep.equals(bookData.authors)
       expect(book).to.have.property('pages', bookData.pages)
@@ -69,7 +68,7 @@ describe('Book Model - Unit Tests', () => {
       expect(book).to.have.property('updatedAt', bookData.updatedAt)
     })
 
-    it('should create a book with the values passed in using casting', () => {
+    it('should create a book by casting the values provided', () => {
       const bookData = {
         title: 1984, // expected type of String
         authors: 'George Orwell', // expected type of Array
@@ -82,6 +81,7 @@ describe('Book Model - Unit Tests', () => {
         updatedAt: new Date()
       }
       const book = new Book(bookData)
+
       expect(book).to.have.property('title').that.equals(String(bookData.title))
       expect(book).to.have.property('authors').that.deep.equals([bookData.authors])
       expect(book).to.have.property('pages').that.equals(Number(bookData.pages))
@@ -99,6 +99,7 @@ describe('Book Model - Unit Tests', () => {
       it('should fail when required properties are missing', () => {
         const book = new Book()
         const error = book.validateSync()
+
         expect(error).to.be.an('object')
         expect(error).to.have.deep.nested.property('errors.title.message', 'Path `title` is required.')
         expect(error).to.have.deep.nested.property('errors.authors.message', 'Path `authors` should have at least one element.')
@@ -107,12 +108,13 @@ describe('Book Model - Unit Tests', () => {
       it('should succeed when required properties are provided', () => {
         const book = new Book({ title: 'Eloquent JavaScript', authors: ['Marijn Haverbeke'] })
         const error = book.validateSync()
+
         expect(error).to.be.undefined
       })
     })
 
     describe('wrong type of values', () => {
-      it('should fail when wrong type of values are passed in', () => {
+      it('should fail when wrong type of values are provided', () => {
         const wrongBookData = {
           title: [], // expected type of String
           authors: {}, // expected type of Array
@@ -121,6 +123,7 @@ describe('Book Model - Unit Tests', () => {
         }
         const book = new Book(wrongBookData)
         const error = book.validateSync()
+
         expect(error).to.have.deep.nested.property('errors.title.message', 'Cast to String failed for value "[]" at path "title"')
         expect(error).to.have.deep.nested.property('errors.authors.message', 'Cast to Array failed for value "{}" at path "authors"')
         expect(error).to.have.deep.nested.property('errors.pages.message', 'Cast to Number failed for value "NaN" at path "pages"')

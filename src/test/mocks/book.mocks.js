@@ -1,5 +1,4 @@
 const faker = require('faker')
-const _merge = require('lodash/merge')
 
 const Book = {
   init(props) {
@@ -13,7 +12,7 @@ const Book = {
       edition: faker.helpers.replaceSymbols('#th')
     })
 
-    return _merge(this, props)
+    return Object.assign(this, props)
   },
   generateAuthors () {
     const authors = []
@@ -30,7 +29,8 @@ const Book = {
   }
 }
 
-const buildBook = (props = {}) => {
+
+const createBook = (props = {}) => {
   const book = Object.create(Book)
 
   book.init(props)
@@ -38,6 +38,4 @@ const buildBook = (props = {}) => {
   return book
 }
 
-module.exports = {
-  buildBook
-}
+module.exports = { Book, createBook }

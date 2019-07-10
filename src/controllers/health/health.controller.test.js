@@ -1,22 +1,17 @@
-const expect = require('chai').expect
-const httpMocks = require('node-mocks-http')
-const sinon = require('sinon')
-
-const getHealth = require('./health.controller')
+const { expect, sinon } = require('../../test')
+const { MockFactory } = require('../../test/mocks')
+const getHealthController = require('./health.controller')
 
 describe('Health Controller - Unit Tests', () => {
-  let req
-  let res
+  let reqOptions
+  let request
+  let response
 
-  beforeEach(() => {
-    req = httpMocks.createRequest({
+  before(() => {
+    reqOptions = {
       method: 'GET',
-      url: '/'
-    })
-
-    res = httpMocks.createResponse()
-
-    sinon.spy(res, 'json')
+      url: '/health'
+    }
   })
 
   afterEach(() => {
@@ -24,16 +19,24 @@ describe('Health Controller - Unit Tests', () => {
   })
 
   it('should return a 200 status code', () => {
-    getHealth(req, res)
+    request = MockFactory.createHttpRequest(reqOptions)
+    response = MockFactory.createHttpResponse()
 
-    expect(res.statusCode).to.equal(200)
-    expect(res.finished).to.equal(true)
+    sinon.spy(response, 'json')
+    
+    getHealthController(request, response)
+    expect(response.statusCode).to.equal(200)
+    expect(response.finished).to.equal(true)
   })
 
   it('should return success status', () => {
-    getHealth(req, res)
+    request = MockFactory.createHttpRequest(reqOptions)
+    response = MockFactory.createHttpResponse()
 
-    sinon.assert.calledWith(res.json, { status: 'success' })
-    expect(res.finished).to.equal(true)
+    sinon.spy(response, 'json')
+
+    getHealthController(request, response)
+    expect(response.json).to.have.been.calledWith({ status: 'success' })
+    expect(response.finished).to.equal(true)
   })
 })

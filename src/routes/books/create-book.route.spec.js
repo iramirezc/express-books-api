@@ -1,16 +1,16 @@
-const chai = require('chai')
-const expect = chai.expect
 const mongoose = require('mongoose')
-const sinon = require('sinon')
 
-const Book = require('../../models/book')
+const { chai, expect, sinon } = require('../../test')
+const { MockFactory } = require('../../test/mocks')
 const server = require('../../server')
-const { buildBook } = require('../../test/helpers/book.mocks')
-
-chai.use(require('chai-http'))
-chai.use(require('sinon-chai'))
 
 describe('Create Book Route - Functional Tests', () => {
+  let BookModel
+
+  beforeEach(() => {
+    BookModel = server.get('models').Book
+  })
+
   afterEach(() => {
     mongoose.deleteModel(/.+/)
     sinon.restore()
@@ -18,16 +18,16 @@ describe('Create Book Route - Functional Tests', () => {
 
   describe('POST /book', () => {
     it('should respond with a 201 status code and the new created book', () => {
-      const bookData = buildBook()
+      const bookData = MockFactory.createBook()
 
-      sinon.stub(Book, 'create').resolves(new Book(bookData))
+      sinon.stub(BookModel, 'create').resolves(new BookModel(bookData))
 
       return chai.request(server)
         .post('/book')
         .send(bookData)
         .then(res => {
-          expect(Book.create).to.have.been.calledWith(bookData.toObject())
           expect(res.status).to.equal(201)
+          expect(BookModel.create).to.have.been.calledWith(bookData.toObject())
           sinon.assert.match(res.body, {
             status: 'success',
             data: Object.assign(bookData.toObject(), {
@@ -40,20 +40,21 @@ describe('Create Book Route - Functional Tests', () => {
     })
 
     it('should respond with a 400 status code and the error message', () => {
-      const bookData = buildBook({ title: '' })
+      const bookData = MockFactory.createBook({ title: '', authors: [] })
 
-      sinon.spy(Book, 'create')
+      sinon.spy(BookModel, 'create')
 
       return chai.request(server)
         .post('/book')
         .send(bookData)
         .then(res => {
-          expect(Book.create).to.have.been.calledWith(bookData.toObject())
+          expect(BookModel.create).to.have.been.calledWith(bookData.toObject())
           expect(res.status).to.equal(400)
-          sinon.assert.match(res.body, {
-            status: 'fail',
-            message: sinon.match(/ValidationError: title: Path `title` is required/)
-          })
+          expect(res.body).to.have.property('status', 'fail')
+          expect(res.body).to.have.property('message')
+            .that.matches(/ValidationError/)
+            .and.matches(/Path `title` is required/)
+            .and.matches(/Path `authors` should have at least one element/)
         })
     })
   })

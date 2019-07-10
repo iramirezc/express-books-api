@@ -1,9 +1,5 @@
-const chai = require('chai')
-const expect = chai.expect
-
+const { chai, expect } = require('../../test')
 const server = require('../../server')
-
-chai.use(require('chai-http'))
 
 describe('Health Route - Functional Tests', () => {
   describe('GET /health', () => {
@@ -12,9 +8,7 @@ describe('Health Route - Functional Tests', () => {
         .get('/health')
         .end((err, res) => {
           expect(res.status).to.equal(200)
-          expect(res.body).to.deep.equal({
-            status: 'success'
-          })
+          expect(res.body).to.deep.equal({ status: 'success' })
           done(err)
         })
     })

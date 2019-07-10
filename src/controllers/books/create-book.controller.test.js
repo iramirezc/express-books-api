@@ -1,14 +1,10 @@
-const chai = require('chai')
-const expect = chai.expect
-const httpMocks = require('node-mocks-http')
-const sinon = require('sinon')
-const { Types: { ObjectId } } = require('mongoose')
+const mongoose = require('mongoose')
+const { Types: { ObjectId } } = mongoose
 
-const Book = require('../../models/book')
-const createBook = require('./create-book.controller')
-const { buildBook } = require('../../test/helpers/book.mocks')
-
-chai.use(require('sinon-chai'))
+const { expect, sinon } = require('../../test')
+const { MockFactory } = require('../../test/mocks')
+const { Book } = require('../../models')
+const createBookController = require('./create-book.controller')
 
 describe('Create Book Controller - Unit Tests', () => {
   let reqOptions
@@ -16,7 +12,7 @@ describe('Create Book Controller - Unit Tests', () => {
   let response
   let bookData
 
-  beforeEach(() => {
+  before(() => {
     reqOptions = {
       method: 'POST',
       url: '/book'
@@ -25,17 +21,19 @@ describe('Create Book Controller - Unit Tests', () => {
 
   afterEach(() => {
     sinon.restore()
+    mongoose.deleteModel(/.+/)
   })
 
   describe('success cases', () => {
     it('should respond with a 201 status code and return the new book', () => {
-      bookData = buildBook()
+      bookData = MockFactory.createBook()
+      request = MockFactory.createHttpRequest({ body: bookData, ...reqOptions })
+      response = MockFactory.createHttpResponse({})
+
       sinon.stub(Book, 'create').resolves(new Book(bookData))
-      request = httpMocks.createRequest({ body: bookData, ...reqOptions })
-      response = httpMocks.createResponse({})
       sinon.spy(response, 'json')
 
-      return createBook(request, response)
+      return createBookController(request, response)
         .then(() => {
           expect(response.statusCode).to.equal(201)
           expect(response.finished).to.equal(true)
@@ -43,12 +41,18 @@ describe('Create Book Controller - Unit Tests', () => {
           expect(Book.create).to.have.been.calledWith(bookData)
           expect(response.json).to.have.been.calledWithMatch({
             status: 'success',
-            data: Object.assign(bookData, {
+            data: {
               _id: sinon.match.instanceOf(ObjectId),
+              title: bookData.title,
               authors: sinon.match.array.deepEquals(bookData.authors),
+              pages: bookData.pages,
+              isbn: bookData.isbn,
+              publisher: bookData.publisher,
+              publicationDate: bookData.publicationDate,
+              edition: bookData.edition,
               createdAt: sinon.match.date,
               updatedAt: sinon.match.date
-            })
+            }
           })
         })
     })
@@ -56,19 +60,20 @@ describe('Create Book Controller - Unit Tests', () => {
 
   describe('error handling', () => {
     it('should respond with a 400 status code and the error message', () => {
-      bookData = buildBook()
+      bookData = MockFactory.createBook()
+      request = MockFactory.createHttpRequest({ body: bookData, ...reqOptions })
+      response = MockFactory.createHttpResponse({})
+
       sinon.stub(Book, 'create').rejects('Fake validation error.')
-      request = httpMocks.createRequest({ body: bookData, ...reqOptions })
-      response = httpMocks.createResponse({})
       sinon.spy(response, 'json')
 
-      return createBook(request, response)
+      return createBookController(request, response)
         .then(() => {
           expect(response.statusCode).to.equal(400)
           expect(response.finished).to.equal(true)
 
           expect(Book.create).to.have.been.calledWith(bookData)
-          expect(response.json).to.have.been.calledWithMatch({
+          expect(response.json).to.have.been.calledWith({
             status: 'fail',
             message: 'Fake validation error.'
           })

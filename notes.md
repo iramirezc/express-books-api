@@ -49,7 +49,7 @@ command: sh -c "yarn install && yarn dev"
 
 ## Docs and learning resources
 
-### Docker + Node.js
+### Dockerizing Node.js Apps
 
 * [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/)
 * [Docker and Node.js Best Practices](https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#cmd)
@@ -57,6 +57,10 @@ command: sh -c "yarn install && yarn dev"
 * [Do not ignore `.dockerignore` (it’s expensive and potentially dangerous)](https://codefresh.io/docker-tutorial/not-ignore-dockerignore/)
 * [`.dockerignore` file](https://docs.docker.com/engine/reference/builder/#dockerignore-file)
 * [A Better Way to Develop Node.js with Docker](https://hackernoon.com/a-better-way-to-develop-node-js-with-docker-cd29d3a0093)
+
+### Node.js
+
+* [Design patterns in Node.js: a practical guide](https://blog.logrocket.com/design-patterns-in-node-js/)
 
 ### Linux
 
@@ -70,6 +74,10 @@ command: sh -c "yarn install && yarn dev"
 * [Test Driven Development: what it is, and what it is not.](https://medium.freecodecamp.org/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2)
 * [Node.js & JavaScript Testing Best Practices (2019)](https://medium.com/@me_37286/yoni-goldberg-javascript-nodejs-testing-best-practices-2b98924c9347)
 * [Mongoose models and unit tests: The definitive guide](https://codeutopia.net/blog/2016/06/10/mongoose-models-and-unit-tests-the-definitive-guide/)
+
+#### Chai
+
+* [How to best use Sinon with Chai](https://logrocket.com/blog/sinon-with-chai/)
 
 ## Questions?
 
