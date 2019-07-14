@@ -1,7 +1,7 @@
 const { sync } = require('glob')
 
 module.exports = server => {
-  const models = {}
+  const models = server.locals.models = {}
   const paths = sync('../models/**/*.model.js', { cwd: __dirname })
 
   paths.forEach(path => {
@@ -12,6 +12,4 @@ module.exports = server => {
 
     models[modelName] = model
   })
-
-  server.set('models', models)
 }

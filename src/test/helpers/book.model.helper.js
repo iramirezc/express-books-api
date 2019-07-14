@@ -1,4 +1,4 @@
-const { Book } = require('../../models')
+const { BookModel } = require('../../models')
 
 module.exports = (chai, utils) => {
   const Assertion = chai.Assertion
@@ -7,10 +7,10 @@ module.exports = (chai, utils) => {
     const obj = this._obj
 
     this.assert(
-      obj instanceof Book,
+      obj instanceof BookModel,
       'expected #{this} to be a instance of #{exp} but got #{act}',
       'expected #{this} not to be a instance #{act}',
-      Book.name, // expected
+      BookModel.name, // expected
       obj.constructor.name // actual
     )
   })

@@ -1,5 +1,5 @@
-const { createBook } = require('../../controllers/books')
+const { BooksController } = require('../../controllers')
 
 module.exports = server => {
-  server.post('/book', createBook)
+  server.post('/book', BooksController.createBook)
 }

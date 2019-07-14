@@ -1,42 +1,35 @@
 const { expect, sinon } = require('../../test')
 const { MockFactory } = require('../../test/mocks')
-const getHealthController = require('./health.controller')
+const HealthController = require('./health.controller')
 
 describe('Health Controller - Unit Tests', () => {
   let reqOptions
-  let request
-  let response
-
-  before(() => {
-    reqOptions = {
-      method: 'GET',
-      url: '/health'
-    }
-  })
 
   afterEach(() => {
     sinon.restore()
   })
 
-  it('should return a 200 status code', () => {
-    request = MockFactory.createHttpRequest(reqOptions)
-    response = MockFactory.createHttpResponse()
+  describe('getHealth - static method', () => {
+    before(() => {
+      reqOptions = {
+        method: 'GET',
+        url: '/health'
+      }
+    })
 
-    sinon.spy(response, 'json')
-    
-    getHealthController(request, response)
-    expect(response.statusCode).to.equal(200)
-    expect(response.finished).to.equal(true)
-  })
+    it('should respond with a 200 status code and a message of success', () => {
+      const request = MockFactory.createHttpRequest(reqOptions)
+      const response = MockFactory.createHttpResponse()
 
-  it('should return success status', () => {
-    request = MockFactory.createHttpRequest(reqOptions)
-    response = MockFactory.createHttpResponse()
+      sinon.spy(response, 'json')
 
-    sinon.spy(response, 'json')
+      HealthController.getHealth(request, response)
 
-    getHealthController(request, response)
-    expect(response.json).to.have.been.calledWith({ status: 'success' })
-    expect(response.finished).to.equal(true)
+      expect(response.statusCode).to.equal(200)
+      expect(response.finished).to.equal(true)
+      expect(response.json).to.have.been.calledWith({
+        status: 'success',
+      })
+    })
   })
 })

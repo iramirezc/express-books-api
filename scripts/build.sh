@@ -1,3 +1,3 @@
 #! /bin/bash
-docker build -t iramirezc/books-api-express .
+docker build -t iramirezc/express-books-api .
 docker image ls -f=reference='iramirezc/*'

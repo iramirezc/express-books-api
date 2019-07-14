@@ -1,5 +1,5 @@
 {
-  "name": "books-api-express",
+  "name": "express-books-api",
   "version": "1.0.0",
   "description": "A Dockerized Bookshelf API using Express",
   "main": "index.js",

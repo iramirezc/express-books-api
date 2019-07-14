@@ -3,11 +3,13 @@
 .nyc_output
 .vscode
 coverage
+docker
 node_modules
 scripts
 
 # root files
 .dockerignore
+.DS_Store
 .gitignore
 .markdownlint.json
 .nvmrc
