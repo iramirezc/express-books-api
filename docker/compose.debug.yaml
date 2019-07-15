@@ -1,0 +1,7 @@
+version: '2'
+
+services:
+  express-books-api:
+    ports:
+      - 9229:9229
+    command: yarn debug

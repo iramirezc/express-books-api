@@ -1,0 +1,5 @@
+version: '2'
+
+services:
+  express-books-api:
+    command: yarn dev

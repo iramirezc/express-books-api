@@ -1,32 +1,31 @@
 version: '2'
 
 services:
-  base:
+  express-books-api:
     image: node:10.15.3-alpine
+    depends_on:
+      - express-books-db
+    container_name: express-books-api
     volumes:
-      - books_node_modules:/usr/src/app/node_modules
+      - express_books_api_node_modules:/usr/src/app/node_modules
       - .:/usr/src/app
     working_dir: /usr/src/app
+    ports:
+      - 8080:8080
     environment:
       - NODE_ENV=development
       - SERVER_HOST=0.0.0.0
       - SERVER_PORT=8080
+    command: yarn start
 
-  dev:
-    extends:
-      service: base
-    command: yarn dev
-    ports:
-      - 8080:8080
-
-  debug:
-    extends:
-      service: base
-    command: yarn debug
-    ports:
-      - 8080:8080
-      - 9229:9229
+  express-books-db:
+    image: mongo
+    container_name: express-books-db
+    volumes:
+      - express_books_api_mongo_db:/data/db
 
 volumes:
-  books_node_modules:
+  express_books_api_node_modules:
+    external: true
+  express_books_api_mongo_db:
     external: true
