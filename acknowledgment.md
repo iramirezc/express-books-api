@@ -99,6 +99,11 @@ docker cp host-file.ext container-name:/path/to/file.ext
 * [Chai.js cheat sheet](https://devhints.io/chai)
 * [A quick and complete guide to Mocha testing](https://blog.logrocket.com/a-quick-and-complete-guide-to-mocha-testing-d0e0ea09f09d/)
 
+#### Mongoose
+
+* [Connections](https://mongoosejs.com/docs/connections.html)
+* [FAQ](https://mongoosejs.com/docs/faq.html)
+
 ## Questions?
 
 * Is it ok to ignore the `yarn.lock` file?

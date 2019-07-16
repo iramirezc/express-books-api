@@ -26,6 +26,9 @@ stop:
 	docker stop express-books-db
 
 # mongo docker container
+mongo:
+	docker-compose up -d express-books-db
+
 mongo-shell:
 	docker exec -it express-books-db mongo
 
