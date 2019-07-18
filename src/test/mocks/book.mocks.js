@@ -1,7 +1,7 @@
 const faker = require('faker')
 
 const Book = {
-  init(props) {
+  init (props) {
     Object.assign(this, {
       title: faker.lorem.words(),
       authors: this.generateAuthors(),
@@ -24,11 +24,10 @@ const Book = {
 
     return authors
   },
-  toObject() {
+  toObject () {
     return JSON.parse(JSON.stringify(this))
   }
 }
-
 
 const createBook = (props = {}) => {
   const book = Object.create(Book)

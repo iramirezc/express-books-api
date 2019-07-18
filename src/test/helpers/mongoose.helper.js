@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const { Types: { ObjectId }} = mongoose
+const { Types: { ObjectId } } = mongoose
 
 module.exports = (chai, utils) => {
   const Assertion = chai.Assertion

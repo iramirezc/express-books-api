@@ -16,6 +16,9 @@ debug:
 	docker-compose -f docker-compose.yaml -f ./docker/compose.debug.yaml up express-books-api
 
 test:
+	docker-compose run --rm express-books-api yarn test
+
+test-watch:
 	docker-compose run --rm express-books-api yarn test --watch
 
 test-debug:

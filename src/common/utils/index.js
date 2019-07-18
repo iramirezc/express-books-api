@@ -24,7 +24,7 @@ function normalizePort (val) {
  * @param {string} env Environment name: development | production | test
  * @param {function} cb Callback function
  */
-function whenEnv(env, cb) {
+function whenEnv (env, cb) {
   if (process.env.NODE_ENV === env && typeof cb === 'function') cb()
 }
 
@@ -36,7 +36,7 @@ function whenEnv(env, cb) {
  * @param {string} mongoDBConfig.name MongoDB database name
  * @returns (string) An uri like: 'mongodb://express-books-db:27017/books'
  */
-function formatDBUri({ host, port, name }) {
+function formatDBUri ({ host, port, name }) {
   return url.format({
     protocol: 'mongodb',
     slashes: true,

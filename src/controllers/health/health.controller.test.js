@@ -28,7 +28,7 @@ describe('Health Controller - Unit Tests', () => {
       expect(response.statusCode).to.equal(200)
       expect(response.finished).to.equal(true)
       expect(response.json).to.have.been.calledWith({
-        status: 'success',
+        status: 'success'
       })
     })
   })

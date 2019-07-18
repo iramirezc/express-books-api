@@ -14,7 +14,7 @@ let dbConnection = null
  * @param {string} dbConfig.uri MongoDB Uri
  * @param {object} dbConfig.options MongoDB options
  */
-function initialConfig(dbConfig) {
+function initialConfig (dbConfig) {
   whenEnv('test', () => {
     // Change db name
     dbConfig.uri = `${dbConfig.uri}-test`
@@ -50,13 +50,13 @@ function initialConfig(dbConfig) {
 
 /**
  * Resolves the connection promise and
- * registers mongoose events listeners 
+ * registers mongoose events listeners
  * when connection is successful.
  * Finally, sets 'dbConnection'
  * to use it as a singleton.
  * @param {function} resolve Resolver function
  */
-function onConnectionSuccess(resolve) {
+function onConnectionSuccess (resolve) {
   mongoose.connection.on('disconnecting', () => console.log('MongoDB: disconnecting...'))
   mongoose.connection.on('disconnected', () => console.log('MongoDB: disconnected!'))
   mongoose.connection.on('close', () => console.log('MongoDB: closed!'))
@@ -77,8 +77,8 @@ function onConnectionSuccess(resolve) {
  * @param {function} reject Rejector function
  * @returns {function} Error handler function
  */
-function onConnectionError(reject) {
-  return function(err) {
+function onConnectionError (reject) {
+  return function (err) {
     console.error(`MongoDB: Error while trying to connect: ${String(err)}`)
     reject(err)
   }
@@ -90,7 +90,7 @@ function onConnectionError(reject) {
  * @param {object} dbOptions MongoDB Options
  * @returns {Promise} That resolves with the dbConnection
  */
-function connect(dbUri, dbOptions) {
+function connect (dbUri, dbOptions) {
   if (dbConnection === null) {
     const dbConfig = {
       uri: dbUri,

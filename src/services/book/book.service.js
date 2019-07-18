@@ -7,14 +7,14 @@ class BookService {
     this.BookModel = BookModel
   }
 
-  static getInstance() {
+  static getInstance () {
     if (instance === null) {
       instance = new BookService({ BookModel })
     }
     return instance
   }
 
-  createBook({
+  createBook ({
     title,
     authors,
     pages,

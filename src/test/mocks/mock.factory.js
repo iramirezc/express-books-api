@@ -3,13 +3,15 @@ const httpMocks = require('node-mocks-http')
 const bookMocks = require('./book.mocks')
 
 class MockFactory {
-  static createBook() {
+  static createBook () {
     return bookMocks.createBook(...arguments)
   }
-  static createHttpRequest() {
+
+  static createHttpRequest () {
     return httpMocks.createRequest(...arguments)
   }
-  static createHttpResponse() {
+
+  static createHttpResponse () {
     return httpMocks.createResponse(...arguments)
   }
 }
