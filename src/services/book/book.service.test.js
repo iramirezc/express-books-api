@@ -51,9 +51,10 @@ describe('Book Service - Unit Tests', () => {
         })
         .catch(err => {
           expect(BookModel.create).to.have.been.calledWith(bookData)
-          expect(err).to.match(/Fake validation error./)
+          expect(err).to.match(/Fake validation error/)
           done()
         })
+        .catch(done)
     })
   })
 })
