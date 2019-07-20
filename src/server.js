@@ -1,8 +1,8 @@
 const express = require('express')
 const server = express()
 
-// set-up plugins
-require('./config/plugins')(server)
+// set-up express middlewares
+require('./config/express')(server)
 
 // config models and routes
 // NOTE: models should always go first

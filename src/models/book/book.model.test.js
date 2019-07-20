@@ -1,9 +1,9 @@
-const { expect, utils } = require('../../test')
+const { expect, tools } = require('../../test')
 const Book = require('./book.model')
 
 describe('Book Model - Unit Tests', () => {
   afterEach(() => {
-    utils.deleteMongooseModels()
+    tools.deleteMongooseModels()
   })
 
   describe('instance initialization', () => {

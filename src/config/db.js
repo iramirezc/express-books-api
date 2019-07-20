@@ -1,7 +1,7 @@
-const { MONGO_DB } = require('../config')
-const { formatDBUri } = require('../common/utils')
-const MongoDBConnector = require('../common/facades/mongoose.facade')
+const { MONGO_DB: { host, port, name, options, settings } } = require('../config')
+const { formatMongoDBStringURI } = require('../shared/utils')
+const MongoDBConnection = require('../shared/facades/mongodb.connection')
 
-const db = new MongoDBConnector(formatDBUri(MONGO_DB), MONGO_DB.options)
+const db = new MongoDBConnection(formatMongoDBStringURI({ host, port, name }), options, settings)
 
 module.exports = db

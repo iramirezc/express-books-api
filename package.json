@@ -7,11 +7,11 @@
     "start": "node index.js",
     "dev": "nodemon index.js --trace-sync-io",
     "debug": "nodemon --inspect-brk=0.0.0.0:9229 index.js",
-    "test": "NODE_ENV=test mocha 'src/**/*.@(test|spec).js' -R dot",
-    "test:unit": "NODE_ENV=test mocha 'src/**/*.test.js'",
-    "test:func": "NODE_ENV=test mocha 'src/**/*.spec.js'",
-    "test:cov": "NODE_ENV=test nyc mocha 'src/**/*.@(test|spec).js' -R nyan",
-    "test:sanity": "NODE_ENV=test mocha 'src/**/*.spec.js' -R list --grep 'sanity'"
+    "test": "mocha 'src/**/*.@(test|spec).js' -R dot",
+    "test:unit": "mocha 'src/**/*.test.js'",
+    "test:func": "mocha 'src/**/*.spec.js'",
+    "test:cov": "nyc mocha 'src/**/*.@(test|spec).js' -R nyan",
+    "test:sanity": "mocha 'src/**/*.spec.js' -R list --grep 'sanity'"
   },
   "author": "iramirezc@live.com.mx",
   "license": "ISC",

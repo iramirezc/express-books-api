@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const { Types: { ObjectId } } = mongoose
 
-module.exports = (chai, utils) => {
+module.exports = chai => {
   const Assertion = chai.Assertion
 
   Assertion.addMethod('objectId', function () {

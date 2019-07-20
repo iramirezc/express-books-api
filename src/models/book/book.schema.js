@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const { minLengthOf } = require('../../common/utils/mongoose.validators')
+const { minLengthOf } = require('../../shared/utils/mongoose.validators')
 
 const BookSchema = new mongoose.Schema({
   title: {

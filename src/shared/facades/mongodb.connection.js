@@ -1,75 +1,44 @@
 const mongoose = require('mongoose')
 const mongooseConnection = mongoose.connection // mongoose default connection
 
-const { whenEnv } = require('../utils')
-
 // dbConnection will eventually be the same as
 // the mongoose.connection after initial connection
 let dbConnection = null
 
 class MongoDBConnection {
   /**
-   * @param {string} dbUri MongoDB URI string
-   * @param {object} dbOptions MongoDB Options
+   * @param {string} dbUri MongoDB Connection String URI
+   * @param {object} dbOptions Mongoose Connection Options
+   * @param {object} dbSettings Mongoose Settings
    */
-  constructor (dbUri, dbOptions) {
+  constructor (dbUri, dbOptions, dbSettings) {
     this.uri = dbUri
     this.options = Object.assign({}, dbOptions)
+    this.applySettings(dbSettings)
   }
 
   /**
-   * Updates the db uri
-   * @param {string} newUri
+   * Configures mongoose settings.
    */
-  setUri (newUri) {
-    this.uri = newUri
-  }
+  applySettings (settings) {
+    this.settings = Object.assign({}, settings)
 
-  /**
-   * Appends a key:val to the config object
-   * @param {string} prop Property's name
-   * @param {*} val Value for the new prop
-   */
-  addToConfig (prop, val) {
-    Object.assign(this.options, { [prop]: val })
-  }
-
-  /**
-   * Configures mongoose,
-   * the 'uri' and the 'config' object
-   * depending on the environment.
-   */
-  beforeConnection () {
-    whenEnv('test', () => {
-      this.setUri(`${this.uri}-test`) // append `test` to db name
-    })
-
-    whenEnv('development', () => {
-      // All executed collection methods
-      // will log output of their arguments
-      // to the console.
-      mongoose.set('debug', true)
-      this.setUri(`${this.uri}-dev`) // append `dev` to db name
-    })
-
-    whenEnv('production', () => {
-      // Disable default mongoose buffer
-      // and fail when connection is disconnected.
-      mongoose.set('bufferCommands', false)
-      // index builds can cause performance degradation
-      // for large production deployments.
-      this.addToConfig('autoIndex', false)
-    })
+    for (const setting in settings) {
+      if (Object.hasOwnProperty.call(settings, setting)) {
+        mongoose.set(setting, settings[setting])
+      }
+    }
   }
 
   /**
    * The following methods
    * are event listeners
-   * for mongoose events.
+   * for every mongoose event.
    */
   onConnecting () {
     console.log(`MongoDB: connecting to: '${this.uri}'`)
     console.log(`MongoDB: with options: ${JSON.stringify(this.options)}`)
+    console.log(`MongoDB: and settings: ${JSON.stringify(this.settings)}`)
   }
 
   onConnected () {
@@ -90,7 +59,7 @@ class MongoDBConnection {
 
   onReconnectFailed () {
     console.error('MongoDB: reconnection failed!')
-    console.log('MongoDB: terminating the app')
+    console.log('MongoDB: terminating the app...')
     process.exit(1)
   }
 
@@ -136,15 +105,21 @@ class MongoDBConnection {
   }
 
   /**
+   * Adds onConnecting and onConnected
+   * events listeners
+   */
+  beforeConnection () {
+    mongooseConnection.on('connecting', this.onConnecting.bind(this))
+    mongooseConnection.on('connected', this.onConnected.bind(this))
+  }
+
+  /**
    * Connects to the MongoDB server
    * @returns {Promise} That resolves with the dbConnection
    */
   connect () {
     if (dbConnection === null) {
       this.beforeConnection()
-
-      mongooseConnection.on('connecting', this.onConnecting.bind(this))
-      mongooseConnection.on('connected', this.onConnected.bind(this))
 
       return new Promise((resolve, reject) => {
         mongoose
@@ -163,9 +138,12 @@ class MongoDBConnection {
    * Closes DB connection
    */
   close () {
-    console.log('MongoDB: closing connection...')
-    dbConnection = null
     return mongooseConnection.close()
+      .then(() => {
+        dbConnection = null
+        // remove all event listeners to prevent possible memory leaks
+        return mongooseConnection.removeAllListeners()
+      })
   }
 
   /**

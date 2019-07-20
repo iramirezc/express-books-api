@@ -1,69 +1,17 @@
-# Dockerized Express.js Books API
+# Acknowledgment
 
-This is a compendium of all the resources from which I learned something during the development of this app.
+This is a compendium of the resources from which I learned something during the development of this app.
 
-## Commands Cheat Sheet
+## On the Web
 
-### Docker Commands
-
-#### Build docker image using Dockerfile
-
-```sh
-docker build -t iramirezc/express-books-api .
-```
-
-#### List docker images with the prefix `iramirezc`
-
-```sh
-docker image ls -f=reference='iramirezc/*'
-```
-
-#### Run docker image
-
-```sh
-docker run -p 8080:8080 -d --name=express-books-api iramirezc/express-books-api
-```
-
-#### Execute commands in `express-books-api` container shell
-
-```sh
-docker exec -it express-books-api sh
-```
-
-#### Test if `express-books-api` container is running the app
-
-```sh
-curl -i localhost:8080/health
-# { "status": "success" }
-```
-
-#### Logs for `express-books-api` container
-
-```sh
-docker logs -f express-books-api
-```
-
-#### Run multiple commands in docker-compose
-
-```yaml
-command: sh -c "yarn install && yarn dev"
-```
-
-#### Copy a file from the host to the container
-
-```sh
-docker cp host-file.ext container-name:/path/to/file.ext
-```
-
-## Docs and Learning Resources
-
-### Docker Resources
+### Docker
 
 * [Do not ignore `.dockerignore` (it’s expensive and potentially dangerous)](https://codefresh.io/docker-tutorial/not-ignore-dockerignore/)
 * [`.dockerignore` file](https://docs.docker.com/engine/reference/builder/#dockerignore-file)
 * [Advanced Docker Compose Configuration](https://runnable.com/docker/advanced-docker-compose-configuration)
 * [Another reason why your Docker containers may be slow](https://hackernoon.com/another-reason-why-your-docker-containers-may-be-slow-d37207dec27f)
 * [Container isolation gone wrong](https://sysdig.com/blog/container-isolation-gone-wrong/)
+* [How to send signal to program run in a docker container?](https://stackoverflow.com/questions/25687131/how-to-send-signal-to-program-run-in-a-docker-container#answer-48804672)
 
 #### Docker + Node.js
 
@@ -76,15 +24,17 @@ docker cp host-file.ext container-name:/path/to/file.ext
 
 * [Mongo - Docker Official Image](https://hub.docker.com/_/mongo)
 
-### Node.js Resources
+### Node.js
 
 * [Design patterns in Node.js: a practical guide](https://blog.logrocket.com/design-patterns-in-node-js/)
+* [NodeJS Best Practices](https://www.codementor.io/mattgoldspink/nodejs-best-practices-du1086jja)
 
-### Linux Resources
+### Linux & command line
 
 * [Linux `chwon` command](https://linuxize.com/post/linux-chown-command/)
+* [What is a Makefile and how does it work?](https://opensource.com/article/18/8/what-how-makefile)
 
-### Testing Resources
+### Testing
 
 * [An Overview of JavaScript Testing in 2019](https://medium.com/welldone-software/an-overview-of-javascript-testing-in-2019-264e19514d0a)
 * [Test Driven Development: what it is, and what it is not.](https://medium.freecodecamp.org/test-driven-development-what-it-is-and-what-it-is-not-41fa6bca02a2)

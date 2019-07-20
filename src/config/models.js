@@ -8,7 +8,7 @@ module.exports = server => {
     const model = require(path)
     const { modelName } = model
 
-    console.log(`Adding model: ${modelName}`)
+    console.log(`Mongoose: adding model: ${modelName}`)
 
     models[modelName] = model
   })

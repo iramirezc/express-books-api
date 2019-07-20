@@ -1,6 +1,6 @@
 const { BookModel } = require('../../models')
 
-module.exports = (chai, utils) => {
+module.exports = chai => {
   const Assertion = chai.Assertion
 
   Assertion.addMethod('book', function () {
