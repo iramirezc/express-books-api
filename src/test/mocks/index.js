@@ -1,3 +1,4 @@
 module.exports = {
-  MockFactory: require('./mock.factory')
+  MockFactory: require('./mock.factory'),
+  BookModelMock: require('./book.model.mock')
 }

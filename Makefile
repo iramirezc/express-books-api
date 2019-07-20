@@ -50,6 +50,11 @@ test-watch:
 test-debug:
 	yarn test --watch --inspect-brk --no-timeout
 
+# runs tests coverage and opens it in Google Chrome
+test-cov:
+	yarn test:cov
+	open -a Google\ Chrome coverage/index.html
+
 # starts api in development mode
 api: dev
 

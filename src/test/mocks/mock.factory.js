@@ -7,6 +7,10 @@ class MockFactory {
     return bookMocks.createBook(...arguments)
   }
 
+  static createRandomBooks () {
+    return bookMocks.createRandomBooks(...arguments)
+  }
+
   static createHttpRequest () {
     return httpMocks.createRequest(...arguments)
   }

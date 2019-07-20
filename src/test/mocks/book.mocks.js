@@ -1,5 +1,7 @@
 const faker = require('faker')
 
+const { BookModel } = require('../../models')
+
 const Book = {
   init (props) {
     Object.assign(this, {
@@ -26,6 +28,14 @@ const Book = {
   },
   toObject () {
     return JSON.parse(JSON.stringify(this))
+  },
+  toDocument () {
+    const book = new BookModel(this)
+    return book.toObject()
+  },
+  toDocumentJSON () {
+    const book = new BookModel(this)
+    return JSON.parse(JSON.stringify(book))
   }
 }
 
@@ -37,4 +47,15 @@ const createBook = (props = {}) => {
   return book
 }
 
-module.exports = { Book, createBook }
+const createRandomBooks = n => {
+  const nBooks = faker.random.number({ min: 1, max: n })
+  const books = []
+
+  for (let i = 0; i < nBooks; i++) {
+    books.push(createBook())
+  }
+
+  return books
+}
+
+module.exports = { Book, createBook, createRandomBooks }

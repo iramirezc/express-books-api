@@ -16,6 +16,22 @@ class BooksController {
         })
       })
   }
+
+  static getAllBooks (req, res) {
+    return BookService.getInstance().getAllBooks()
+      .then(books => {
+        return res.status(200).json({
+          status: 'success',
+          data: books
+        })
+      })
+      .catch(err => {
+        return res.status(500).json({
+          status: 'fail',
+          message: String(err)
+        })
+      })
+  }
 }
 
 module.exports = BooksController

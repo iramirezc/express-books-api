@@ -33,6 +33,10 @@ class BookService {
       edition
     })
   }
+
+  getAllBooks () {
+    return this.BookModel.find({})
+  }
 }
 
 module.exports = BookService
