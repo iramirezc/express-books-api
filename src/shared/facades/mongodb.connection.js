@@ -14,14 +14,18 @@ class MongoDBConnection {
   constructor (dbUri, dbOptions, dbSettings) {
     this.uri = dbUri
     this.options = Object.assign({}, dbOptions)
-    this.applySettings(dbSettings)
+    this.settings = {}
+
+    if (typeof dbSettings === 'object') {
+      this.applySettings(dbSettings)
+    }
   }
 
   /**
    * Configures mongoose settings.
    */
   applySettings (settings) {
-    this.settings = Object.assign({}, settings)
+    Object.assign(this.settings, settings)
 
     for (const setting in settings) {
       if (Object.hasOwnProperty.call(settings, setting)) {
@@ -80,12 +84,13 @@ class MongoDBConnection {
    * @param {function} resolve Resolver function
    */
   onConnectionSuccess (resolve) {
-    mongooseConnection.on('disconnecting', this.onDisconnecting.bind(this))
-    mongooseConnection.on('disconnected', this.onDisconnected.bind(this))
-    mongooseConnection.on('reconnected', this.onReconnected.bind(this))
-    mongooseConnection.on('reconnectFailed', this.onReconnectFailed.bind(this))
-    mongooseConnection.on('close', this.onClose.bind(this))
-    mongooseConnection.on('error', this.onError.bind(this))
+    mongooseConnection
+      .on('disconnecting', this.onDisconnecting.bind(this))
+      .on('disconnected', this.onDisconnected.bind(this))
+      .on('reconnected', this.onReconnected.bind(this))
+      .on('reconnectFailed', this.onReconnectFailed.bind(this))
+      .on('close', this.onClose.bind(this))
+      .on('error', this.onError.bind(this))
 
     dbConnection = mongooseConnection
 
@@ -109,8 +114,9 @@ class MongoDBConnection {
    * events listeners
    */
   beforeConnection () {
-    mongooseConnection.on('connecting', this.onConnecting.bind(this))
-    mongooseConnection.on('connected', this.onConnected.bind(this))
+    mongooseConnection
+      .once('connecting', this.onConnecting.bind(this))
+      .once('connected', this.onConnected.bind(this))
   }
 
   /**

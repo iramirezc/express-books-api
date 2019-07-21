@@ -28,6 +28,7 @@ This is a compendium of the resources from which I learned something during the 
 
 * [Design patterns in Node.js: a practical guide](https://blog.logrocket.com/design-patterns-in-node-js/)
 * [NodeJS Best Practices](https://www.codementor.io/mattgoldspink/nodejs-best-practices-du1086jja)
+* [Class: EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter)
 
 ### Linux & command line
 

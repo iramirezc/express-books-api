@@ -71,9 +71,19 @@ function parseBoolean (val, _default = false) {
   return _default
 }
 
+/**
+ * Calls a callback function when NODE_ENV matches to env provided.
+ * @param {string} env Name of environment
+ * @param {function} cb Callback function
+ */
+function whenEnv (env, cb) {
+  if (process.env.NODE_ENV === env && typeof cb === 'function') cb()
+}
+
 module.exports = {
   deepFreeze,
   formatMongoDBStringURI,
   normalizePort,
-  parseBoolean
+  parseBoolean,
+  whenEnv
 }

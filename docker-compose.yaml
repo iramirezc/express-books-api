@@ -17,16 +17,18 @@ services:
       - SERVER_PORT=8080
       - MONGO_DB_HOST=express-books-db
       - MONGO_DB_PORT=27017
-      - MONGO_DB_NAME=books
+      - MONGO_DB_NAME=books-dev
       - MONGO_DB_AUTO_INDEX=true
       - MONGO_DB_BUFFER_COMMANDS=false
-      - MONGO_DB_DEBUG=false
+      - MONGO_DB_DEBUG=true
     command: yarn start
   express-books-db:
     image: mongo
     container_name: express-books-db
     volumes:
       - express_books_api_mongo_db:/data/db
+    ports:
+      - 27017:27017
 volumes:
   express_books_api_node_modules:
     external: true

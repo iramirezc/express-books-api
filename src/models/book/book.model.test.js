@@ -1,11 +1,7 @@
-const { expect, tools } = require('../../test')
+const { expect } = require('../../test')
 const Book = require('./book.model')
 
 describe('Book Model - Unit Tests', () => {
-  afterEach(() => {
-    tools.deleteMongooseModels()
-  })
-
   describe('instance initialization', () => {
     it('should create an instance of a Book with all its public props', () => {
       const book = new Book()

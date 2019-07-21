@@ -1,15 +1,10 @@
-const { expect, sinon, tools } = require('../../test')
+const { expect, sinon } = require('../../test')
 const { MockFactory, BookModelMock } = require('../../test/mocks')
 const { BookService } = require('../../services')
 const BooksController = require('./books.controller')
 
 describe('Book Controller - Unit Tests', () => {
   let reqOptions
-
-  afterEach(() => {
-    sinon.restore()
-    tools.deleteMongooseModels()
-  })
 
   describe('createBook - static method', () => {
     before(() => {

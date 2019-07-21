@@ -1,4 +1,4 @@
-const { chai, expect, sinon, tools } = require('../../test')
+const { chai, expect, sinon } = require('../../test')
 const { MockFactory } = require('../../test/mocks')
 const { BookService } = require('../../services')
 const server = require('../../server')
@@ -8,11 +8,6 @@ describe('POST /book - Functional Tests', () => {
 
   beforeEach(() => {
     BookModel = server.locals.models.Book
-  })
-
-  afterEach(() => {
-    sinon.restore()
-    tools.deleteMongooseModels()
   })
 
   it('should respond with a success status and the new created book', done => {

@@ -1,11 +1,11 @@
-const { deepFreeze, normalizePort, parseBoolean } = require('../shared/utils')
+const { deepFreeze, normalizePort, parseBoolean, whenEnv } = require('../shared/utils')
 
 /**
- * All default values are configured
+ * Default values are configured
  * towards development environment.
  */
 const config = {
-  NODE_ENV: process.env.NODE_ENV || 'development',
+  NODE_ENV: process.env.NODE_ENV,
   SERVER: {
     host: process.env.SERVER_HOST || '127.0.0.1',
     port: normalizePort(process.env.SERVER_PORT || 3000)
@@ -13,7 +13,7 @@ const config = {
   MONGO_DB: {
     host: process.env.MONGO_DB_HOST || '127.0.0.1',
     port: normalizePort(process.env.MONGO_DB_PORT || 27017),
-    name: process.env.MONGO_DB_NAME || 'test',
+    name: process.env.MONGO_DB_NAME,
     // Read more about connection options here:
     // https://mongoosejs.com/docs/connections.html
     options: {
@@ -38,5 +38,11 @@ const config = {
     }
   }
 }
+
+whenEnv('test', () => {
+  console.log('Running tests with ENV values:')
+  console.log(`> NODE_ENV=${config.NODE_ENV}`)
+  console.log(`> MONGO_DB_NAME=${config.MONGO_DB.name}\n`)
+})
 
 module.exports = deepFreeze(config)

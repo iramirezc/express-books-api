@@ -9,10 +9,6 @@ describe('Book Service - Unit Tests', () => {
     service = new BookService({ BookModel: BookModelMock })
   })
 
-  afterEach(() => {
-    sinon.restore()
-  })
-
   describe('initialization', () => {
     it('should be initialized correctly', () => {
       expect(service).to.be.instanceOf(BookService)
@@ -68,6 +64,15 @@ describe('Book Service - Unit Tests', () => {
   })
 
   describe('getAllBooks - method', () => {
+    it('should return an empty array if there are no books', done => {
+      service.getAllBooks()
+        .then(books => {
+          expect(books).to.be.an('array').that.is.empty // eslint-disable-line
+          done()
+        })
+        .catch(done)
+    })
+
     it('should return all the books', done => {
       const expectedBooks = MockFactory.createRandomBooks(5).map(book => book.toDocument())
 

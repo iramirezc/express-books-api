@@ -20,9 +20,10 @@ Get the server running using the `Makefile`
 make
 ```
 
-or use the `package.json` *(a MongoDB server should be running on your localhost)*
+or use the `package.json` *(a MongoDB server should be running on localhost:27017)*
 
 ```sh
+export MONGO_DB_NAME=books-dev
 yarn install
 yarn start
 ```

@@ -1,14 +1,9 @@
-const { chai, expect, sinon, tools } = require('../../test')
+const { chai, expect, sinon } = require('../../test')
 const { MockFactory } = require('../../test/mocks')
 const { BookService } = require('../../services')
 const server = require('../../server')
 
 describe('GET /books - Functional Tests', () => {
-  afterEach(() => {
-    sinon.restore()
-    tools.deleteMongooseModels()
-  })
-
   it('should respond with a success status and all the books', done => {
     const expectedBooks = MockFactory.createRandomBooks(10).map(book => book.toDocumentJSON())
 

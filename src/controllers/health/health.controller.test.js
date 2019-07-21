@@ -6,10 +6,6 @@ const db = require('../../config/db')
 describe('Health Controller - Unit Tests', () => {
   let reqOptions
 
-  afterEach(() => {
-    sinon.restore()
-  })
-
   describe('getHealth - static method', () => {
     before(() => {
       reqOptions = {

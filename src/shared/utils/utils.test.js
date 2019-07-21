@@ -1,4 +1,4 @@
-const { expect } = require('../../test')
+const { expect, sinon } = require('../../test')
 const utils = require('./index')
 const validators = require('./mongoose.validators')
 
@@ -53,10 +53,12 @@ describe('Shared Utils - Unit Tests', () => {
     describe('normalizePort', () => {
       it('should return a number when port is a string', () => {
         expect(utils.normalizePort('8080')).to.equal(8080)
+        expect(utils.normalizePort('3000')).to.equal(3000)
       })
 
       it('should return a the value as it is if it can not convert it to a number', () => {
         expect(utils.normalizePort('abc')).to.equal('abc')
+        expect(utils.normalizePort(null)).to.equal(null)
       })
 
       it('should return false when the port number happens to be negative', () => {
@@ -83,6 +85,35 @@ describe('Shared Utils - Unit Tests', () => {
         expect(utils.parseBoolean(null, false)).to.equal(false)
         expect(utils.parseBoolean(undefined, true)).to.equal(true)
         expect(utils.parseBoolean(undefined, false)).to.equal(false)
+      })
+
+      it('should return false if value can not be converted and default is not provided', () => {
+        expect(utils.parseBoolean(123)).to.equals(false)
+        expect(utils.parseBoolean(null)).to.equals(false)
+      })
+    })
+
+    describe('whenEnv', () => {
+      it('should call callback function when env matches', () => {
+        const cb = sinon.spy()
+        const env = 'testing'
+
+        sinon.stub(process.env, 'NODE_ENV').value(env)
+
+        utils.whenEnv(env, cb)
+
+        expect(cb).to.have.been.calledOnce // eslint-disable-line
+      })
+
+      it('should not call callback function when env does not match', () => {
+        const cb = sinon.spy()
+        const env = 'testing'
+
+        sinon.stub(process.env, 'NODE_ENV').value('other')
+
+        utils.whenEnv(env, cb)
+
+        expect(cb).not.to.have.been.calledOnce // eslint-disable-line
       })
     })
   })
