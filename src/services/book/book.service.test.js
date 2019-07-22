@@ -44,23 +44,6 @@ describe('Book Service - Unit Tests', () => {
         })
         .catch(done)
     })
-
-    it('should return an error if something goes wrong', done => {
-      const bookData = MockFactory.createBook()
-
-      sinon.stub(BookModelMock, 'create').rejects('Fake Book Model validation error.')
-
-      service.createBook(bookData)
-        .then(() => {
-          done(new Error('BookModel.create was supposed to fail.'))
-        })
-        .catch(err => {
-          expect(BookModelMock.create).to.have.been.calledWith(bookData)
-          expect(err).to.match(/Fake Book Model validation error/)
-          done()
-        })
-        .catch(done)
-    })
   })
 
   describe('getAllBooks - method', () => {
@@ -85,17 +68,40 @@ describe('Book Service - Unit Tests', () => {
         })
         .catch(done)
     })
+  })
 
-    it('should throw and error if something goes wrong', done => {
-      sinon.stub(BookModelMock, 'find').rejects('Fake BookModel find error.')
+  describe('getBookById - method', () => {
+    it('should return the book when found', done => {
+      const bookId = MockFactory.createMongoId()
+      const expectedBook = MockFactory.createBook({ _id: bookId }).toDocument()
 
-      service.getAllBooks()
-        .then(() => {
-          done(new Error('BookModel.find was supposed to fail.'))
+      sinon
+        .stub(BookModelMock, 'findById')
+        .callThrough()
+        .withArgs(expectedBook._id).resolves(expectedBook)
+
+      service.getBookById(bookId)
+        .then(book => {
+          expect(BookModelMock.findById).to.have.been.calledWith(bookId)
+          expect(book).to.deep.equals(expectedBook)
+          done()
         })
-        .catch(err => {
-          expect(BookModelMock.find).to.have.been.calledOnce //eslint-disable-line
-          expect(err).to.match(/Fake BookModel find error/)
+        .catch(done)
+    })
+
+    it('should return null when not found', done => {
+      const wrongId = MockFactory.createMongoId()
+      const expectedBook = MockFactory.createBook().toDocument()
+
+      sinon
+        .stub(BookModelMock, 'findById')
+        .callThrough()
+        .withArgs(expectedBook._id).resolves(expectedBook)
+
+      service.getBookById(wrongId)
+        .then(book => {
+          expect(BookModelMock.findById).to.have.been.calledWith(wrongId)
+          expect(book).to.equal(null)
           done()
         })
         .catch(done)

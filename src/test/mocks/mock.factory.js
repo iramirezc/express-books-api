@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const httpMocks = require('node-mocks-http')
 
 const bookMocks = require('./book.mocks')
@@ -17,6 +18,10 @@ class MockFactory {
 
   static createHttpResponse () {
     return httpMocks.createResponse(...arguments)
+  }
+
+  static createMongoId () {
+    return mongoose.Types.ObjectId()
   }
 }
 

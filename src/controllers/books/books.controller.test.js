@@ -4,9 +4,9 @@ const { BookService } = require('../../services')
 const BooksController = require('./books.controller')
 
 describe('Book Controller - Unit Tests', () => {
-  let reqOptions
-
   describe('createBook - static method', () => {
+    let reqOptions
+
     before(() => {
       reqOptions = {
         method: 'POST',
@@ -73,6 +73,8 @@ describe('Book Controller - Unit Tests', () => {
   })
 
   describe('getAllBooks - static method', () => {
+    let reqOptions
+
     before(() => {
       reqOptions = {
         method: 'GET',
@@ -119,6 +121,108 @@ describe('Book Controller - Unit Tests', () => {
           expect(response.json).to.have.been.calledWith({
             status: 'fail',
             message: 'Fake service getAllBooks error.'
+          })
+          done()
+        })
+        .catch(done)
+    })
+  })
+
+  describe('findBookById (middleware) - static method', () => {
+    const createReqObj = bookId => ({
+      method: 'GET',
+      url: `/books/${bookId}`,
+      params: { bookId }
+    })
+
+    let next
+
+    beforeEach(() => {
+      next = sinon.fake()
+    })
+
+    it('should attach the book to the req object if found and then call next middleware', done => {
+      const expectedBook = MockFactory.createBook().toDocument()
+      const request = MockFactory.createHttpRequest(createReqObj(expectedBook._id))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.stub(BookService.getInstance(), 'getBookById').resolves(expectedBook)
+
+      BooksController.findBookById(request, response, next)
+        .then(() => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(expectedBook._id)
+          expect(response.finished).to.equal(false)
+          expect(request._book).to.equals(expectedBook)
+          expect(next).to.have.been.calledWith()
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should call next function with an error if something goes wrong', done => {
+      const bookId = MockFactory.createMongoId()
+      const request = MockFactory.createHttpRequest(createReqObj(bookId))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.stub(BookService.getInstance(), 'getBookById').rejects('Fake service getBookById error')
+
+      BooksController.findBookById(request, response, next)
+        .then(() => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(bookId)
+          expect(response.finished).to.equal(false)
+          expect(request._book).to.be.undefined // eslint-disable-line
+          expect(next.getCall(0).args[0]).to.match(/Fake service getBookById error/)
+          done()
+        })
+        .catch(done)
+    })
+  })
+
+  describe('getBookById - static method', () => {
+    const createReqObj = bookId => ({
+      method: 'GET',
+      url: `/books/${bookId}`,
+      params: { bookId }
+    })
+
+    it('should respond with a 200 status code and return the book found', done => {
+      const expectedBook = MockFactory.createBook().toDocument()
+      const request = MockFactory.createHttpRequest(createReqObj(expectedBook._id))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.spy(response, 'json')
+
+      Object.assign(request, { _book: expectedBook }) // put the book object like the middleware
+
+      BooksController.getBookById(request, response)
+        .then(() => {
+          expect(response.statusCode).to.equal(200)
+          expect(response.finished).to.equal(true)
+          expect(response.json).to.have.been.calledWithMatch({
+            status: 'success',
+            data: expectedBook
+          })
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a 404 status code if book not found', done => {
+      const bookId = MockFactory.createMongoId()
+      const request = MockFactory.createHttpRequest(createReqObj(bookId))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.spy(response, 'json')
+
+      Object.assign(request, { _book: null }) // put the book object like the middleware
+
+      BooksController.getBookById(request, response)
+        .then(() => {
+          expect(response.statusCode).to.equal(404)
+          expect(response.finished).to.equal(true)
+          expect(response.json).to.have.been.calledWithMatch({
+            status: 'fail',
+            message: `bookId '${bookId}' not found.`
           })
           done()
         })

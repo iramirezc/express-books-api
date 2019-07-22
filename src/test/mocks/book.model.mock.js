@@ -6,6 +6,9 @@ const BookModel = {
   },
   find () {
     return Promise.resolve([])
+  },
+  findById () {
+    return Promise.resolve(null)
   }
 }
 

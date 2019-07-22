@@ -32,6 +32,35 @@ class BooksController {
         })
       })
   }
+
+  // TODO: move this function to its own BooksMiddleware class
+  static findBookById (req, res, next) {
+    const { bookId } = req.params
+
+    return BookService.getInstance().getBookById(bookId)
+      .then(book => {
+        req._book = book
+        next()
+      })
+      .catch(next)
+  }
+
+  static getBookById (req, res) {
+    return Promise.resolve()
+      .then(() => {
+        if (!req._book) {
+          return res.status(404).json({
+            status: 'fail',
+            message: `bookId '${req.params.bookId}' not found.`
+          })
+        }
+
+        return res.status(200).json({
+          status: 'success',
+          data: req._book
+        })
+      })
+  }
 }
 
 module.exports = BooksController

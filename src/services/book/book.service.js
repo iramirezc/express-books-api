@@ -37,6 +37,10 @@ class BookService {
   getAllBooks () {
     return this.BookModel.find({})
   }
+
+  getBookById (bookId) {
+    return this.BookModel.findById(bookId)
+  }
 }
 
 module.exports = BookService

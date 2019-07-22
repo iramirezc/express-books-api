@@ -95,7 +95,7 @@ describe('Shared Utils - Unit Tests', () => {
 
     describe('whenEnv', () => {
       it('should call callback function when env matches', () => {
-        const cb = sinon.spy()
+        const cb = sinon.fake()
         const env = 'testing'
 
         sinon.stub(process.env, 'NODE_ENV').value(env)
@@ -106,7 +106,7 @@ describe('Shared Utils - Unit Tests', () => {
       })
 
       it('should not call callback function when env does not match', () => {
-        const cb = sinon.spy()
+        const cb = sinon.fake()
         const env = 'testing'
 
         sinon.stub(process.env, 'NODE_ENV').value('other')
