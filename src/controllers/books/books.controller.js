@@ -33,18 +33,6 @@ class BooksController {
       })
   }
 
-  // TODO: move this function to its own BooksMiddleware class
-  static findBookById (req, res, next) {
-    const { bookId } = req.params
-
-    return BookService.getInstance().getBookById(bookId)
-      .then(book => {
-        req._book = book
-        next()
-      })
-      .catch(next)
-  }
-
   static getBookById (req, res) {
     return Promise.resolve()
       .then(() => {
