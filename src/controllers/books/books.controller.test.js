@@ -10,7 +10,7 @@ describe('Books Controller - Unit Tests', () => {
     before(() => {
       reqOptions = {
         method: 'POST',
-        url: '/book'
+        url: '/books'
       }
     })
 

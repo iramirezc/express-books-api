@@ -3,7 +3,7 @@ const { MockFactory } = require('../../test/mocks')
 const { BookService } = require('../../services')
 const server = require('../../server')
 
-describe('POST /book - Functional Tests', () => {
+describe('POST /books - Functional Tests', () => {
   let BookModel
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('POST /book - Functional Tests', () => {
     sinon.stub(BookService.getInstance(), 'createBook').resolves(new BookModel(bookData))
 
     chai.request(server)
-      .post('/book')
+      .post('/books')
       .send(bookData)
       .then(res => {
         expect(res.status).to.equal(201)
@@ -40,7 +40,7 @@ describe('POST /book - Functional Tests', () => {
     sinon.spy(BookModel, 'create')
 
     chai.request(server)
-      .post('/book')
+      .post('/books')
       .send(bookData)
       .then(res => {
         expect(BookModel.create).to.have.been.calledWith(bookData.toObject())

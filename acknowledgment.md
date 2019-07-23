@@ -55,6 +55,10 @@ This is a compendium of the resources from which I learned something during the 
 * [Connections](https://mongoosejs.com/docs/connections.html)
 * [FAQ](https://mongoosejs.com/docs/faq.html)
 
+### RESTful APIs
+
+* [10 Best Practices for Better RESTful API](https://medium.com/@mwaysolutions/10-best-practices-for-better-restful-api-cbe81b06f291)
+
 ## Questions?
 
 * Is it ok to ignore the `yarn.lock` file?
