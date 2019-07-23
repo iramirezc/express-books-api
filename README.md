@@ -1,3 +1,5 @@
-# Express.js Books API
+# Dockerized Express.js Books API + MongoDB
 
-A Dockerized Bookshelf API using Express.js
+A fully functional Dockerized Express.js API with a CRUD implementation to manage Books.
+
+> WIP: see `development` branch

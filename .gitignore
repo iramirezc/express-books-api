@@ -1,8 +1,12 @@
 # directories
+.nyc_output
+.vscode
+coverage
 node_modules
 
 # root files
 yarn.lock
+.markdownlint.json
 
 # wildcards
 *.log
