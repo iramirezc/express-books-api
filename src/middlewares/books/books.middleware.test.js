@@ -18,18 +18,43 @@ describe('Books Middleware - Unit Tests', () => {
     })
 
     it('should attach the book to the req object if found and then call next middleware', done => {
-      const expectedBook = MockFactory.createBook().toDocument()
-      const request = MockFactory.createHttpRequest(createReqObj(expectedBook._id))
+      const bookId = MockFactory.createMongoId()
+      const expectedBook = MockFactory.createBook({ _id: bookId }).toDocument()
+      const request = MockFactory.createHttpRequest(createReqObj(bookId))
       const response = MockFactory.createHttpResponse()
 
       sinon.stub(BookService.getInstance(), 'getBookById').resolves(expectedBook)
 
-      BooksMiddleware.findBookById(request, response, next)
+      BooksMiddleware.findBookById(request, response, next, bookId)
         .then(() => {
-          expect(BookService.getInstance().getBookById).to.have.been.calledWith(expectedBook._id)
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(bookId)
           expect(response.finished).to.equal(false)
           expect(request._book).to.equals(expectedBook)
           expect(next).to.have.been.calledWith()
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a 404 status code if the book is not found', done => {
+      const bookId = MockFactory.createMongoId()
+      const request = MockFactory.createHttpRequest(createReqObj(bookId))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.spy(response, 'json')
+
+      sinon.stub(BookService.getInstance(), 'getBookById').resolves(null)
+
+      BooksMiddleware.findBookById(request, response, next, bookId)
+        .then(() => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(bookId)
+          expect(response.statusCode).to.equal(404)
+          expect(response.finished).to.equal(true)
+          expect(response.json).to.have.been.calledWithMatch({
+            status: 'fail',
+            message: `bookId '${bookId}' not found.`
+          })
+          expect(next).not.to.have.been.called // eslint-disable-line
           done()
         })
         .catch(done)
@@ -42,7 +67,7 @@ describe('Books Middleware - Unit Tests', () => {
 
       sinon.stub(BookService.getInstance(), 'getBookById').rejects('Fake service getBookById error')
 
-      BooksMiddleware.findBookById(request, response, next)
+      BooksMiddleware.findBookById(request, response, next, bookId)
         .then(() => {
           expect(BookService.getInstance().getBookById).to.have.been.calledWith(bookId)
           expect(response.finished).to.equal(false)

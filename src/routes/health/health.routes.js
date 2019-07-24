@@ -1,5 +1,13 @@
+const express = require('express')
+
 const { HealthController } = require('../../controllers')
 
-module.exports = server => {
-  server.get('/health', HealthController.getHealth)
+module.exports = () => {
+  const router = express.Router()
+
+  router
+    .route('/health')
+    .get(HealthController.getHealth)
+
+  return router
 }

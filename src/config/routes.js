@@ -6,6 +6,7 @@ module.exports = server => {
 
   paths.forEach(path => {
     console.log(`Express: requiring: ${basename(path)}`)
-    require(path)(server)
+    const router = require(path)
+    server.use(router())
   })
 }

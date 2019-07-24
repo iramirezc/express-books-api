@@ -157,22 +157,19 @@ describe('Books Controller - Unit Tests', () => {
         .catch(done)
     })
 
-    it('should respond with a 404 status code if book not found', done => {
-      const bookId = MockFactory.createMongoId()
-      const request = MockFactory.createHttpRequest(createReqObj(bookId))
+    it('should respond with a 500 status code and the error message', done => {
+      const request = MockFactory.createHttpRequest()
       const response = MockFactory.createHttpResponse()
 
-      sinon.spy(response, 'json')
-
-      Object.assign(request, { _book: null }) // put the book object like the middleware
+      sinon.stub(response, 'json').onFirstCall().throws('Fake response json error.')
 
       BooksController.getBookById(request, response)
         .then(() => {
-          expect(response.statusCode).to.equal(404)
-          expect(response.finished).to.equal(true)
-          expect(response.json).to.have.been.calledWithMatch({
+          expect(response.statusCode).to.equal(500)
+          expect(response.finished).to.equal(false)
+          expect(response.json).to.have.been.calledWith({
             status: 'fail',
-            message: `bookId '${bookId}' not found.`
+            message: 'Fake response json error.'
           })
           done()
         })
