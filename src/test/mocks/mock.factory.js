@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const httpMocks = require('node-mocks-http')
 
-const bookMocks = require('./book.mocks')
+const bookMocks = require('./book-data.mock')
 
 class MockFactory {
   static createBook () {

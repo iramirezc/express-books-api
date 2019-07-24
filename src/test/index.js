@@ -7,7 +7,7 @@ const tools = require('./tools')
 // ==================================================
 chai.use(require('chai-http'))
 chai.use(require('sinon-chai'))
-chai.use(require('./helpers/book.model.helper'))
+chai.use(require('./helpers/book-model.helper'))
 chai.use(require('./helpers/mongoose.helper'))
 
 // global mocha configuration
