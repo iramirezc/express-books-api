@@ -193,7 +193,7 @@ describe('Mongoose DB Connection Facade - Unit Tests', () => {
             mongoose.connection.emit('reconnected')
             mongoose.connection.emit('reconnectFailed')
             mongoose.connection.emit('close')
-            mongoose.connection.emit('error')
+            mongoose.connection.emit('error', new Error('Fake error connection.'))
           }
 
           expect(db.onConnecting).to.have.been.calledOnce // eslint-disable-line

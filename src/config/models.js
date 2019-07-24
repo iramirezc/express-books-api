@@ -1,15 +1,11 @@
 const { sync } = require('glob')
+const { basename } = require('path')
 
-module.exports = server => {
-  const models = server.locals.models = {}
+module.exports = () => {
   const paths = sync('../models/**/*.model.js', { cwd: __dirname })
 
   paths.forEach(path => {
-    const model = require(path)
-    const { modelName } = model
-
-    console.log(`Mongoose: adding model: ${modelName}`)
-
-    models[modelName] = model
+    console.log(`Mongoose: requiring: ${basename(path)}`)
+    require(path)
   })
 }

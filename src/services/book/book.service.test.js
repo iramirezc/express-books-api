@@ -1,19 +1,19 @@
 const { expect, sinon } = require('../../test')
-const { MockFactory, BookModelMock } = require('../../test/mocks')
+const { MockFactory, BookModelMock: BookModel } = require('../../test/mocks')
 const BookService = require('./book.service')
 
 describe('Book Service - Unit Tests', () => {
   let service
 
   beforeEach(() => {
-    service = new BookService({ BookModel: BookModelMock })
+    service = new BookService({ BookModel })
   })
 
   describe('initialization', () => {
     it('should be initialized correctly', () => {
       expect(service).to.be.instanceOf(BookService)
       expect(Object.keys(service)).to.deep.equal(['BookModel'])
-      expect(service.BookModel).to.equal(BookModelMock)
+      expect(service.BookModel).to.equal(BookModel)
       expect(service).to.have.property('createBook').to.be.a('function')
       expect(service).to.have.property('getAllBooks').to.be.a('function')
     })
@@ -23,11 +23,11 @@ describe('Book Service - Unit Tests', () => {
     it('should create a new book with the data provided', done => {
       const bookData = MockFactory.createBook()
 
-      sinon.spy(BookModelMock, 'create')
+      sinon.spy(BookModel, 'create')
 
       service.createBook(bookData)
         .then(book => {
-          expect(BookModelMock.create).to.have.been.calledWith(bookData)
+          expect(BookModel.create).to.have.been.calledWith(bookData)
           sinon.assert.match(book, {
             _id: sinon.match.object,
             title: bookData.title,
@@ -59,7 +59,7 @@ describe('Book Service - Unit Tests', () => {
     it('should return all the books', done => {
       const expectedBooks = MockFactory.createRandomBooks(5).map(book => book.toDocument())
 
-      sinon.stub(BookModelMock, 'find').resolves(expectedBooks)
+      sinon.stub(BookModel, 'find').resolves(expectedBooks)
 
       service.getAllBooks()
         .then(books => {
@@ -76,13 +76,13 @@ describe('Book Service - Unit Tests', () => {
       const expectedBook = MockFactory.createBook({ _id: bookId }).toDocument()
 
       sinon
-        .stub(BookModelMock, 'findById')
+        .stub(BookModel, 'findById')
         .callThrough()
         .withArgs(expectedBook._id).resolves(expectedBook)
 
       service.getBookById(bookId)
         .then(book => {
-          expect(BookModelMock.findById).to.have.been.calledWith(bookId)
+          expect(BookModel.findById).to.have.been.calledWith(bookId)
           expect(book).to.deep.equals(expectedBook)
           done()
         })
@@ -94,13 +94,13 @@ describe('Book Service - Unit Tests', () => {
       const expectedBook = MockFactory.createBook().toDocument()
 
       sinon
-        .stub(BookModelMock, 'findById')
+        .stub(BookModel, 'findById')
         .callThrough()
         .withArgs(expectedBook._id).resolves(expectedBook)
 
       service.getBookById(wrongId)
         .then(book => {
-          expect(BookModelMock.findById).to.have.been.calledWith(wrongId)
+          expect(BookModel.findById).to.have.been.calledWith(wrongId)
           expect(book).to.equal(null)
           done()
         })
