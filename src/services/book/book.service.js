@@ -14,7 +14,7 @@ class BookService {
     return instance
   }
 
-  createBook ({
+  static fromPayload ({
     title,
     authors,
     pages,
@@ -23,7 +23,7 @@ class BookService {
     publicationDate,
     edition
   }) {
-    return this.BookModel.create({
+    return {
       title,
       authors,
       pages,
@@ -31,7 +31,11 @@ class BookService {
       publisher,
       publicationDate,
       edition
-    })
+    }
+  }
+
+  createBook (payload) {
+    return this.BookModel.create(BookService.fromPayload(payload))
   }
 
   getAllBooks () {
@@ -40,6 +44,13 @@ class BookService {
 
   getBookById (bookId) {
     return this.BookModel.findById(bookId)
+  }
+
+  validatePayload (payload) {
+    const { BookModel } = this
+    const tempBook = new BookModel(BookService.fromPayload(payload))
+
+    return tempBook.validate()
   }
 }
 

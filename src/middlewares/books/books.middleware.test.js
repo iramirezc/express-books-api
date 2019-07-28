@@ -50,7 +50,7 @@ describe('Books Middleware - Unit Tests', () => {
           expect(BookService.getInstance().getBookById).to.have.been.calledWith(bookId)
           expect(response.statusCode).to.equal(404)
           expect(response.finished).to.equal(true)
-          expect(response.json).to.have.been.calledWithMatch({
+          expect(response.json).to.have.been.calledWith({
             status: 'fail',
             message: `bookId '${bookId}' not found.`
           })
@@ -71,7 +71,7 @@ describe('Books Middleware - Unit Tests', () => {
         .then(() => {
           expect(BookService.getInstance().getBookById).to.have.been.calledWith(bookId)
           expect(response.finished).to.equal(false)
-          expect(request._book).to.be.undefined // eslint-disable-line
+          expect(request._book).to.equal(undefined)
           expect(next.getCall(0).args[0]).to.match(/Fake service getBookById error/)
           done()
         })

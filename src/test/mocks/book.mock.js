@@ -26,16 +26,13 @@ const Book = {
 
     return authors
   },
-  toObject () {
-    return JSON.parse(JSON.stringify(this))
-  },
   toDocument () {
-    const book = new BookModel(this)
-    return book.toObject()
+    const tempBook = Object.create(Book)
+    tempBook.init(new BookModel(this).toObject())
+    return tempBook
   },
-  toDocumentJSON () {
-    const book = new BookModel(this)
-    return JSON.parse(JSON.stringify(book))
+  toJSONObject () {
+    return JSON.parse(JSON.stringify(this))
   }
 }
 

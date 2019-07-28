@@ -2,5 +2,10 @@
   "reporter": [
     "html",
     "text-summary"
+  ],
+  "exclude": [
+    "**/*.spec.js",
+    "**/*.test.js",
+    "**/test{,s}/**"
   ]
 }

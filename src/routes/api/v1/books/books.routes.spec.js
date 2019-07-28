@@ -7,22 +7,19 @@ describe('API V1 Books Routes - Functional Tests', () => {
   describe('POST /api/v1/books', () => {
     it('should respond with a success status and the new created book', done => {
       const bookData = MockFactory.createBook()
+      const expectedBook = MockFactory.createBook(bookData).toDocument()
 
-      sinon.stub(BookService.getInstance(), 'createBook').resolves(bookData.toDocument())
+      sinon.stub(BookService.getInstance(), 'createBook').resolves(expectedBook)
 
       chai.request(server)
         .post('/api/v1/books')
         .send(bookData)
         .then(res => {
+          expect(BookService.getInstance().createBook).to.have.been.calledWith(bookData.toJSONObject())
           expect(res.status).to.equal(201)
-          expect(BookService.getInstance().createBook).to.have.been.calledWith(bookData.toObject())
-          sinon.assert.match(res.body, {
+          expect(res.body).to.deep.equal({
             status: 'success',
-            data: Object.assign(bookData.toObject(), {
-              _id: sinon.match.string,
-              createdAt: sinon.match.string,
-              updatedAt: sinon.match.string
-            })
+            data: expectedBook.toJSONObject()
           })
           done()
         })
@@ -38,13 +35,12 @@ describe('API V1 Books Routes - Functional Tests', () => {
         .post('/api/v1/books')
         .send(bookData)
         .then(res => {
-          expect(BookService.getInstance().createBook).to.have.been.calledWith(bookData.toObject())
+          expect(BookService.getInstance().createBook).to.have.been.calledWith(bookData.toJSONObject())
           expect(res.status).to.equal(400)
-          expect(res.body).to.have.property('status', 'fail')
-          expect(res.body).to.have.property('message')
-            .that.matches(/ValidationError/)
-            .and.matches(/Path `title` is required/)
-            .and.matches(/Path `authors` should have at least one element/)
+          expect(res.body).to.deep.equal({
+            status: 'fail',
+            message: 'ValidationError: title: Path `title` is required., authors: Path `authors` should have at least one element.'
+          })
           done()
         })
         .catch(done)
@@ -53,7 +49,7 @@ describe('API V1 Books Routes - Functional Tests', () => {
 
   describe('GET /api/v1/books', () => {
     it('should respond with a success status and all the books found', done => {
-      const expectedBooks = MockFactory.createRandomBooks(10).map(book => book.toDocumentJSON())
+      const expectedBooks = MockFactory.createRandomBooks(10).map(book => book.toDocument())
 
       sinon.stub(BookService.getInstance(), 'getAllBooks').resolves(expectedBooks)
 
@@ -61,9 +57,11 @@ describe('API V1 Books Routes - Functional Tests', () => {
         .get('/api/v1/books')
         .then(res => {
           expect(res.status).to.equal(200)
-          expect(BookService.getInstance().getAllBooks).to.have.been.calledOnce // eslint-disable-line
-          expect(res.body.status).to.equal('success')
-          expect(res.body.data).to.deep.equal(expectedBooks)
+          expect(BookService.getInstance().getAllBooks).to.have.been.calledWith()
+          expect(res.body).to.deep.equal({
+            status: 'success',
+            data: expectedBooks.map(book => book.toJSONObject())
+          })
           done()
         })
         .catch(done)
@@ -75,11 +73,12 @@ describe('API V1 Books Routes - Functional Tests', () => {
       chai.request(server)
         .get('/api/v1/books')
         .then(res => {
-          expect(BookService.getInstance().getAllBooks).to.have.been.calledOnce // eslint-disable-line
+          expect(BookService.getInstance().getAllBooks).to.have.been.calledWith()
           expect(res.status).to.equal(500)
-          expect(res.body).to.have.property('status', 'fail')
-          expect(res.body).to.have.property('message')
-            .that.matches(/Fake getAllBooks error/)
+          expect(res.body).to.deep.equal({
+            status: 'fail',
+            message: 'Fake getAllBooks error.'
+          })
           done()
         })
         .catch(done)
@@ -90,17 +89,21 @@ describe('API V1 Books Routes - Functional Tests', () => {
     const buildUrl = bookId => `/api/v1/books/${bookId}`
 
     it('should respond with a success status and the book found', done => {
-      const expectedBook = MockFactory.createBook().toDocumentJSON()
+      const bookId = MockFactory.createMongoId()
+      const bookData = MockFactory.createBook({ _id: bookId })
+      const expectedBook = MockFactory.createBook(bookData).toDocument()
 
       sinon.stub(BookService.getInstance(), 'getBookById').resolves(expectedBook)
 
       chai.request(server)
-        .get(buildUrl(expectedBook._id))
+        .get(buildUrl(bookId))
         .then(res => {
-          expect(BookService.getInstance().getBookById).to.have.been.calledWith(expectedBook._id)
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
           expect(res.status).to.equal(200)
-          expect(res.body.status).to.equal('success')
-          expect(res.body.data).to.deep.equal(expectedBook)
+          expect(res.body).to.deep.equal({
+            status: 'success',
+            data: expectedBook.toJSONObject()
+          })
           done()
         })
         .catch(done)
@@ -116,8 +119,10 @@ describe('API V1 Books Routes - Functional Tests', () => {
         .then(res => {
           expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
           expect(res.status).to.equal(404)
-          expect(res.body.status).to.equal('fail')
-          expect(res.body.message).to.match(/bookId '.+' not found/)
+          expect(res.body).to.deep.equal({
+            status: 'fail',
+            message: `bookId '${bookId}' not found.`
+          })
           done()
         })
         .catch(done)
@@ -134,6 +139,7 @@ describe('API V1 Books Routes - Functional Tests', () => {
           expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
           expect(res.status).to.equal(500)
           // TODO: validate message when implementing Error Handler middleware
+          expect(res.body).to.deep.equal({})
           done()
         })
         .catch(done)

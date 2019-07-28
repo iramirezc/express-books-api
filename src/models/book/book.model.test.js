@@ -18,7 +18,7 @@ describe('Book Model - Unit Tests', () => {
         'updatedAt'
       ]
 
-      expect(book).to.be.a.book()
+      expect(book).to.be.an.instanceOf(Book)
       expect(book.toObject()).to.have.all.keys(expectedKeys)
     })
 
@@ -27,7 +27,7 @@ describe('Book Model - Unit Tests', () => {
 
       expect(book).to.have.property('_id').that.is.an.objectId()
       expect(book).to.have.property('title', '')
-      expect(book).to.have.property('authors').that.is.an('array').and.is.empty // eslint-disable-line
+      expect(book).to.have.property('authors').that.is.an('array').with.length(0)
       expect(book).to.have.property('pages', 0)
       expect(book).to.have.property('isbn', '')
       expect(book).to.have.property('publisher', '')
@@ -103,7 +103,7 @@ describe('Book Model - Unit Tests', () => {
         const book = new Book({ title: 'Eloquent JavaScript', authors: ['Marijn Haverbeke'] })
         const error = book.validateSync()
 
-        expect(error).to.be.undefined // eslint-disable-line
+        expect(error).to.equal(undefined)
       })
     })
 

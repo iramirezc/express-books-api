@@ -16,32 +16,21 @@ describe('Books Controller - Unit Tests', () => {
 
     it('should respond with a 201 status code and return the new book', done => {
       const bookData = MockFactory.createBook()
+      const expectedBook = MockFactory.createBook(bookData).toDocument()
       const request = MockFactory.createHttpRequest({ body: bookData, ...reqOptions })
       const response = MockFactory.createHttpResponse()
 
-      sinon.stub(BookService.getInstance(), 'createBook').resolves(bookData.toDocument())
+      sinon.stub(BookService.getInstance(), 'createBook').resolves(expectedBook)
       sinon.spy(response, 'json')
 
       BooksController.createBook(request, response)
         .then(() => {
           expect(response.statusCode).to.equal(201)
           expect(response.finished).to.equal(true)
-
           expect(BookService.getInstance().createBook).to.have.been.calledWith(bookData)
-          expect(response.json).to.have.been.calledWithMatch({
+          expect(response.json).to.have.been.calledWith({
             status: 'success',
-            data: {
-              _id: sinon.match.object,
-              title: bookData.title,
-              authors: sinon.match.array.deepEquals(bookData.authors),
-              pages: bookData.pages,
-              isbn: bookData.isbn,
-              publisher: bookData.publisher,
-              publicationDate: bookData.publicationDate,
-              edition: bookData.edition,
-              createdAt: sinon.match.date,
-              updatedAt: sinon.match.date
-            }
+            data: expectedBook
           })
           done()
         })
@@ -60,7 +49,6 @@ describe('Books Controller - Unit Tests', () => {
         .then(() => {
           expect(response.statusCode).to.equal(400)
           expect(response.finished).to.equal(true)
-
           expect(BookService.getInstance().createBook).to.have.been.calledWith(bookData)
           expect(response.json).to.have.been.calledWith({
             status: 'fail',
@@ -94,9 +82,8 @@ describe('Books Controller - Unit Tests', () => {
         .then(() => {
           expect(response.statusCode).to.equal(200)
           expect(response.finished).to.equal(true)
-
-          expect(BookService.getInstance().getAllBooks).to.have.been.calledOnce // eslint-disable-line
-          expect(response.json).to.have.been.calledWithMatch({
+          expect(BookService.getInstance().getAllBooks).to.have.been.calledWith()
+          expect(response.json).to.have.been.calledWith({
             status: 'success',
             data: expectedBooks
           })
@@ -116,8 +103,7 @@ describe('Books Controller - Unit Tests', () => {
         .then(() => {
           expect(response.statusCode).to.equal(500)
           expect(response.finished).to.equal(true)
-
-          expect(BookService.getInstance().getAllBooks).to.have.been.calledOnce // eslint-disable-line
+          expect(BookService.getInstance().getAllBooks).to.have.been.calledWith()
           expect(response.json).to.have.been.calledWith({
             status: 'fail',
             message: 'Fake service getAllBooks error.'
@@ -148,7 +134,7 @@ describe('Books Controller - Unit Tests', () => {
         .then(() => {
           expect(response.statusCode).to.equal(200)
           expect(response.finished).to.equal(true)
-          expect(response.json).to.have.been.calledWithMatch({
+          expect(response.json).to.have.been.calledWith({
             status: 'success',
             data: expectedBook
           })
