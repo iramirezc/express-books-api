@@ -11,7 +11,7 @@ const Book = {
       isbn: faker.helpers.replaceSymbols('978-#-##-######-#'),
       publisher: faker.company.companyName(),
       publicationDate: faker.date.past(faker.random.number(10)),
-      edition: faker.helpers.replaceSymbols('#th')
+      edition: faker.helpers.replaceSymbols('##th')
     })
 
     return Object.assign(this, props)

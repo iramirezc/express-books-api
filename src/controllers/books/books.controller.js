@@ -48,6 +48,24 @@ class BooksController {
         })
       })
   }
+
+  static updateBookById (req, res) {
+    const { bookId } = req.params
+
+    return BookService.getInstance().updateBookById(bookId, req.body)
+      .then(book => {
+        return res.status(200).json({
+          status: 'success',
+          data: book
+        })
+      })
+      .catch(err => {
+        return res.status(400).json({
+          status: 'fail',
+          message: String(err)
+        })
+      })
+  }
 }
 
 module.exports = BooksController

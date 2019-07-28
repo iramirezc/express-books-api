@@ -34,7 +34,9 @@ const config = {
       bufferCommands: parseBoolean(process.env.MONGO_DB_BUFFER_COMMANDS, true),
       // All executed collection methods
       // will log their arguments to the console.
-      debug: parseBoolean(process.env.MONGO_DB_DEBUG, false)
+      debug: parseBoolean(process.env.MONGO_DB_DEBUG, false),
+      // https://mongoosejs.com/docs/deprecations.html#-findandmodify-
+      useFindAndModify: false
     }
   }
 }

@@ -162,4 +162,57 @@ describe('Books Controller - Unit Tests', () => {
         .catch(done)
     })
   })
+
+  describe('updateBookById - static method', () => {
+    const createReqObj = (bookId, body) => ({
+      method: 'PUT',
+      url: `/books/${bookId}`,
+      params: { bookId },
+      body
+    })
+
+    it('should respond with a 200 status code and return the book updated', done => {
+      const bookId = MockFactory.createMongoId()
+      const expectedBook = MockFactory.createBook({ _id: bookId }).toDocument()
+      const newBookData = MockFactory.createBook()
+      const request = MockFactory.createHttpRequest(createReqObj(bookId, newBookData))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.stub(BookService.getInstance(), 'updateBookById').resolves(expectedBook)
+      sinon.spy(response, 'json')
+
+      BooksController.updateBookById(request, response, null, bookId)
+        .then(() => {
+          expect(response.statusCode).to.equal(200)
+          expect(response.finished).to.equal(true)
+          expect(BookService.getInstance().updateBookById).to.have.been.calledWith(bookId, newBookData)
+          expect(response.json).to.have.been.calledWith({
+            status: 'success',
+            data: expectedBook
+          })
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a 400 status code and the error message', done => {
+      const request = MockFactory.createHttpRequest()
+      const response = MockFactory.createHttpResponse()
+
+      sinon.stub(BookService.getInstance(), 'updateBookById').rejects('Fake service error.')
+      sinon.spy(response, 'json')
+
+      BooksController.updateBookById(request, response)
+        .then(() => {
+          expect(response.statusCode).to.equal(400)
+          expect(response.finished).to.equal(true)
+          expect(response.json).to.have.been.calledWith({
+            status: 'fail',
+            message: 'Fake service error.'
+          })
+          done()
+        })
+        .catch(done)
+    })
+  })
 })

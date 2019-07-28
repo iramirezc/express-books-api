@@ -145,4 +145,76 @@ describe('API V1 Books Routes - Functional Tests', () => {
         .catch(done)
     })
   })
+
+  describe('PUT /api/v1/books/:bookId', () => {
+    const buildUrl = bookId => `/api/v1/books/${bookId}`
+
+    it('should respond with a success status and the book updated', done => {
+      const bookId = MockFactory.createMongoId()
+      const originalBook = MockFactory.createBook({ _id: bookId }).toDocument()
+      const newBookData = MockFactory.createBook()
+      const expectedBook = MockFactory.createBook({ ...originalBook, ...newBookData }).toDocument()
+
+      sinon.stub(BookService.getInstance(), 'getBookById').resolves(originalBook)
+      sinon.stub(BookService.getInstance(), 'updateBookById').resolves(expectedBook)
+
+      chai.request(server)
+        .put(buildUrl(bookId))
+        .send(newBookData)
+        .then(res => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
+          expect(BookService.getInstance().updateBookById).to.have.been.calledWith(String(bookId), newBookData.toJSONObject())
+          expect(res.status).to.equal(200)
+          expect(res.body).to.deep.equal({
+            status: 'success',
+            data: expectedBook.toJSONObject()
+          })
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a fail status when the book is not found', done => {
+      const bookId = MockFactory.createMongoId()
+
+      sinon.stub(BookService.getInstance(), 'getBookById').resolves(null)
+
+      chai.request(server)
+        .put(buildUrl(bookId))
+        .send({})
+        .then(res => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
+          expect(res.status).to.equal(404)
+          expect(res.body).to.deep.equal({
+            status: 'fail',
+            message: `bookId '${bookId}' not found.`
+          })
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a fail status if something goes wrong', done => {
+      const bookId = MockFactory.createMongoId()
+      const originalBook = MockFactory.createBook({ _id: bookId }).toDocument()
+
+      sinon.stub(BookService.getInstance(), 'getBookById').resolves(originalBook)
+      sinon.stub(BookService.getInstance(), 'updateBookById').rejects('Fake service error')
+
+      chai.request(server)
+        .put(buildUrl(bookId))
+        .send({})
+        .then(res => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
+          expect(BookService.getInstance().updateBookById).to.have.been.calledWith(String(bookId), {})
+          expect(res.status).to.equal(400)
+          expect(res.body).to.deep.equal({
+            status: 'fail',
+            message: 'Fake service error'
+          })
+          done()
+        })
+        .catch(done)
+    })
+  })
 })

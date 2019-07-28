@@ -52,6 +52,14 @@ class BookService {
 
     return tempBook.validate()
   }
+
+  updateBookById (bookId, newBookData) {
+    const updates = Object.assign(BookService.fromPayload(newBookData), { updatedAt: Date.now() + 1 })
+
+    return this.BookModel.findByIdAndUpdate(bookId, updates)
+      .setOptions({ new: true, omitUndefined: true, runValidators: true })
+      .exec()
+  }
 }
 
 module.exports = BookService
