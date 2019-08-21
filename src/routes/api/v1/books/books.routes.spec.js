@@ -217,4 +217,51 @@ describe('API V1 Books Routes - Functional Tests', () => {
         .catch(done)
     })
   })
+
+  describe('DELETE /api/v1/books/:bookId', () => {
+    const buildUrl = bookId => `/api/v1/books/${bookId}`
+
+    it('should respond with a success status and the book deleted', done => {
+      const bookId = MockFactory.createMongoId().toString()
+      const expectedBook = MockFactory.createBook({ _id: bookId })
+
+      sinon.stub(BookService.getInstance(), 'getBookById').resolves(expectedBook)
+      sinon.stub(BookService.getInstance(), 'deleteBookById').resolves(expectedBook)
+
+      chai.request(server)
+        .delete(buildUrl(bookId))
+        .then(res => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(bookId)
+          expect(BookService.getInstance().deleteBookById).to.have.been.calledWith(bookId)
+          expect(res.status).to.equal(200)
+          expect(res.body).to.deep.equal({
+            status: 'success',
+            data: expectedBook.toJSONObject()
+          })
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a fail status when the book is not found', done => {
+      const bookId = MockFactory.createMongoId().toString()
+
+      sinon.stub(BookService.getInstance(), 'getBookById').resolves(null)
+      sinon.spy(BookService.getInstance(), 'deleteBookById')
+
+      chai.request(server)
+        .delete(buildUrl(bookId))
+        .then(res => {
+          expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
+          expect(BookService.getInstance().deleteBookById).not.to.have.been.called // eslint-disable-line
+          expect(res.status).to.equal(404)
+          expect(res.body).to.deep.equal({
+            status: 'fail',
+            message: `bookId '${bookId}' not found.`
+          })
+          done()
+        })
+        .catch(done)
+    })
+  })
 })

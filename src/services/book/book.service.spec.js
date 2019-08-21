@@ -306,4 +306,46 @@ describe('Book Service - Integration Tests', () => {
         .catch(done)
     })
   })
+
+  describe('deleteBookById - method', () => {
+    it('should remove a book by id and return it', done => {
+      const bookId = MockFactory.createMongoId()
+      const originalBook = MockFactory.createBook({ _id: bookId })
+
+      sinon.spy(BookModel, 'findByIdAndRemove')
+
+      BookModel.insertMany(originalBook)
+        .then(() => {
+          return BookModel.findById(bookId)
+        })
+        .then(savedBook => {
+          expect(savedBook._id).to.deep.equal(bookId, 'make sure book was saved')
+          return service.deleteBookById(bookId)
+        })
+        .then(deletedBook => {
+          expect(BookModel.findByIdAndRemove).to.have.been.calledWith(bookId)
+          expect(deletedBook._id).to.deep.equal(bookId)
+          return BookModel.findById(bookId)
+        })
+        .then(savedBook => {
+          expect(savedBook).to.equal(null)
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should do nothing when trying to delete a book that does not exist', done => {
+      const bookId = MockFactory.createMongoId()
+
+      sinon.spy(BookModel, 'findByIdAndRemove')
+
+      service.deleteBookById(bookId)
+        .then(deletedBook => {
+          expect(BookModel.findByIdAndRemove).to.have.been.calledWith(bookId)
+          expect(deletedBook).to.equal(null)
+          done()
+        })
+        .catch(done)
+    })
+  })
 })

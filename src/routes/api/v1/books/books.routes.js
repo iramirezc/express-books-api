@@ -17,6 +17,7 @@ module.exports = () => {
     .route('/api/v1/books/:bookId')
     .get(BooksController.getBookById)
     .put(BooksController.updateBookById)
+    .delete(BooksController.deleteBookById)
 
   return router
 }

@@ -66,6 +66,24 @@ class BooksController {
         })
       })
   }
+
+  static deleteBookById (req, res) {
+    const { bookId } = req.params
+
+    return BookService.getInstance().deleteBookById(bookId)
+      .then(deletedBook => {
+        return res.status(200).json({
+          status: 'success',
+          data: deletedBook
+        })
+      })
+      .catch(err => {
+        return res.status(500).json({
+          status: 'fail',
+          message: String(err)
+        })
+      })
+  }
 }
 
 module.exports = BooksController

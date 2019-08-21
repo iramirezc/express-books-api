@@ -215,4 +215,78 @@ describe('Books Controller - Unit Tests', () => {
         .catch(done)
     })
   })
+
+  describe('deleteBookById - static method', () => {
+    const createReqObj = bookId => ({
+      method: 'DELETE',
+      url: `/books/${bookId}`,
+      params: { bookId }
+    })
+
+    it('should respond with a 200 status code and return the deleted book', done => {
+      const expectedBook = MockFactory.createBook().toDocument()
+      const request = MockFactory.createHttpRequest(createReqObj(expectedBook._id))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.stub(BookService.getInstance(), 'deleteBookById').resolves(expectedBook)
+      sinon.spy(response, 'json')
+
+      BooksController.deleteBookById(request, response)
+        .then(() => {
+          expect(response.statusCode).to.equal(200)
+          expect(response.finished).to.equal(true)
+          expect(BookService.getInstance().deleteBookById).to.have.been.calledWith(expectedBook._id)
+          expect(response.json).to.have.been.calledWith({
+            status: 'success',
+            data: expectedBook
+          })
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a 200 status code and return null when book is not found', done => {
+      const bookId = MockFactory.createMongoId()
+      const request = MockFactory.createHttpRequest(createReqObj(bookId))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.stub(BookService.getInstance(), 'deleteBookById').resolves(null)
+      sinon.spy(response, 'json')
+
+      BooksController.deleteBookById(request, response)
+        .then(() => {
+          expect(response.statusCode).to.equal(200)
+          expect(response.finished).to.equal(true)
+          expect(BookService.getInstance().deleteBookById).to.have.been.calledWith(bookId)
+          expect(response.json).to.have.been.calledWith({
+            status: 'success',
+            data: null
+          })
+          done()
+        })
+        .catch(done)
+    })
+
+    it('should respond with a 500 status code and the error message', done => {
+      const bookId = MockFactory.createMongoId()
+      const request = MockFactory.createHttpRequest(createReqObj(bookId))
+      const response = MockFactory.createHttpResponse()
+
+      sinon.stub(BookService.getInstance(), 'deleteBookById').rejects('Fake service error.')
+      sinon.spy(response, 'json')
+
+      BooksController.deleteBookById(request, response)
+        .then(() => {
+          expect(response.statusCode).to.equal(500)
+          expect(response.finished).to.equal(true)
+          expect(BookService.getInstance().deleteBookById).to.have.been.calledWith(bookId)
+          expect(response.json).to.have.been.calledWith({
+            status: 'fail',
+            message: 'Fake service error.'
+          })
+          done()
+        })
+        .catch(done)
+    })
+  })
 })

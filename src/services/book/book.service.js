@@ -46,6 +46,7 @@ class BookService {
     return this.BookModel.findById(bookId)
   }
 
+  // TODO: Remove it as is not being used
   validatePayload (payload) {
     const { BookModel } = this
     const tempBook = new BookModel(BookService.fromPayload(payload))
@@ -54,11 +55,16 @@ class BookService {
   }
 
   updateBookById (bookId, newBookData) {
+    // TODO: 'updateAt' can be added in the pre middleware.
     const updates = Object.assign(BookService.fromPayload(newBookData), { updatedAt: Date.now() + 1 })
 
     return this.BookModel.findByIdAndUpdate(bookId, updates)
       .setOptions({ new: true, omitUndefined: true, runValidators: true })
       .exec()
+  }
+
+  deleteBookById (bookId) {
+    return this.BookModel.findByIdAndRemove(bookId)
   }
 }
 
