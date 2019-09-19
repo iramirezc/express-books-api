@@ -4,4 +4,7 @@ services:
   express-books-api:
     ports:
       - 9229:9229
+    environment:
+      - DEBUG=express*
+      - MONGO_DB_DEBUG=true
     command: yarn debug

@@ -20,7 +20,6 @@ services:
       - MONGO_DB_NAME=books-dev
       - MONGO_DB_AUTO_INDEX=true
       - MONGO_DB_BUFFER_COMMANDS=false
-      - MONGO_DB_DEBUG=true
     command: yarn start
   express-books-db:
     image: mongo
