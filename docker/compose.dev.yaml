@@ -2,4 +2,21 @@
 version: '2'
 services:
   express-books-api:
+    environment:
+      # D
+      - DEBUG=false
+      # L
+      - LOGGER_LEVEL=info
+      # M
+      - MONGO_DB_AUTO_INDEX=true
+      - MONGO_DB_BUFFER_COMMANDS=false
+      - MONGO_DB_DEBUG=false
+      - MONGO_DB_HOST=express-books-db
+      - MONGO_DB_NAME=books-dev
+      - MONGO_DB_PORT=27017
+      # N
+      - NODE_ENV=development
+      # S
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8080
     command: yarn dev

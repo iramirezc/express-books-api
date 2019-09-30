@@ -1,23 +1,24 @@
 const { SERVER: { host, port } } = require('./src/config')
 const db = require('./src/config/db')
 const server = require('./src/server')
+const logger = require('./src/services').LoggerService.get('Server', { level: 'info' })
 
 db.connect()
   .then(() => {
     process.on('SIGINT', () => {
       db.close().then(() => {
-        console.log('MongoDB: default connection is disconnected due to application termination.')
+        logger.info('mongoDB default connection is disconnected due to application termination.')
         process.exit(0)
       })
     })
   })
   .then(() => {
     server.listen(port, host, () => {
-      console.log(`NODE_ENV=${server.get('env')}`)
-      console.log(`Server running on: 'http://${host}:${port}'`)
+      logger.info(`listening on: 'http://${host}:${port}'`)
+      logger.info(`NODE_ENV=${server.get('env')}`)
     })
   })
   .catch(err => {
-    console.error('Something went wrong: ', err)
+    logger.error('something went wrong: ', err)
     process.exit(1)
   })

@@ -59,6 +59,14 @@ This is a compendium of the resources from which I learned something during the 
 
 * [10 Best Practices for Better RESTful API](https://medium.com/@mwaysolutions/10-best-practices-for-better-restful-api-cbe81b06f291)
 
+### Logging
+
+* [Winston.js - GitHub](https://github.com/winstonjs/winston#readme)
+* [Morgan - GitHub](https://github.com/expressjs/morgan#readme)
+* [Advanced logging with NodeJs](http://tostring.it/2014/06/23/advanced-logging-with-nodejs/)
+* [How to Get Node.js Logging Right](https://blog.risingstack.com/node-js-logging-tutorial/)
+* [How To Use Winston to Log Node.js Applications](https://www.digitalocean.com/community/tutorials/how-to-use-winston-to-log-node-js-applications)
+
 ## Questions?
 
 * Is it ok to ignore the `yarn.lock` file?

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const mongooseConnection = mongoose.connection // mongoose default connection
 
+const logger = require('../../services').LoggerService.get('MongoDB', { level: 'info' })
+
 // dbConnection will eventually be the same as
 // the mongoose.connection after initial connection
 let dbConnection = null
@@ -40,39 +42,38 @@ class MongoDBConnection {
    * for every mongoose event.
    */
   onConnecting () {
-    console.log(`MongoDB: connecting to: '${this.uri}'`)
-    console.log(`MongoDB: with options: ${JSON.stringify(this.options)}`)
-    console.log(`MongoDB: and settings: ${JSON.stringify(this.settings)}`)
+    logger.info(`connecting to: '${this.uri}'`)
+    logger.debug('with options:', this.options)
+    logger.debug('and settings:', this.settings)
   }
 
   onConnected () {
-    console.log('MongoDB: connected!')
+    logger.info('connected!')
   }
 
   onDisconnecting () {
-    console.log('MongoDB: disconnecting...')
+    logger.warn('disconnecting...')
   }
 
   onDisconnected () {
-    console.log('MongoDB: disconnected!')
+    logger.warn('disconnected!')
   }
 
   onReconnected () {
-    console.log('MongoDB: reconnected!')
+    logger.info('reconnected!')
   }
 
   onReconnectFailed () {
-    console.error('MongoDB: reconnection failed!')
-    console.log('MongoDB: terminating the app...')
+    logger.error('reconnection failed!')
     process.exit(1)
   }
 
   onClose () {
-    console.log('MongoDB: connection closed!')
+    logger.info('connection closed!')
   }
 
   onError (err) {
-    console.error(`MongoDB: error: ${String(err)}`)
+    logger.error(`error: ${String(err)}`)
   }
 
   /**
@@ -104,7 +105,7 @@ class MongoDBConnection {
    */
   onConnectionError (reject) {
     return function (err) {
-      console.error(`MongoDB: Error while trying to connect: ${String(err)}`)
+      logger.error(`error while trying to connect: ${String(err)}`)
       reject(err)
     }
   }

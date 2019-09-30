@@ -38,6 +38,9 @@ const config = {
       // https://mongoosejs.com/docs/deprecations.html#-findandmodify-
       useFindAndModify: false
     }
+  },
+  LOGGER: {
+    level: process.env.LOGGER_LEVEL
   }
 }
 

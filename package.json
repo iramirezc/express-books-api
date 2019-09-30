@@ -20,7 +20,9 @@
     "express": "^4.16.4",
     "glob": "^7.1.4",
     "lodash": "^4.17.11",
-    "mongoose": "^5.5.11"
+    "mongoose": "^5.5.11",
+    "morgan": "^1.9.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "chai": "^4.2.0",
