@@ -94,6 +94,15 @@ describe('Shared Utils - Unit Tests', () => {
     })
 
     describe('whenEnv', () => {
+      beforeEach(() => {
+        this.nodeEnv = process.env.NODE_ENV
+        process.env.NODE_ENV = 'test'
+      })
+
+      afterEach(() => {
+        process.env.NODE_ENV = this.nodeEnv
+      })
+
       it('should call callback function when env matches', () => {
         const cb = sinon.fake()
         const env = 'testing'
@@ -102,7 +111,7 @@ describe('Shared Utils - Unit Tests', () => {
 
         utils.whenEnv(env, cb)
 
-        expect(cb).to.have.been.calledOnce // eslint-disable-line
+        expect(cb).to.have.been.callCount(1)
       })
 
       it('should not call callback function when env does not match', () => {
@@ -113,7 +122,7 @@ describe('Shared Utils - Unit Tests', () => {
 
         utils.whenEnv(env, cb)
 
-        expect(cb).not.to.have.been.calledOnce // eslint-disable-line
+        expect(cb).to.have.been.callCount(0)
       })
     })
   })

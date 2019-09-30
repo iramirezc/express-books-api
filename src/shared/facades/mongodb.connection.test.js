@@ -57,7 +57,7 @@ describe('Mongoose DB Connection Facade - Unit Tests', () => {
       const db = new MongoDBConnection(uri, options)
 
       expect(db.settings).to.deep.equal({})
-      expect(mongoose.set).not.to.not.have.been.called // eslint-disable-line
+      expect(mongoose.set).to.have.been.callCount(0)
     })
   })
 
@@ -71,8 +71,8 @@ describe('Mongoose DB Connection Facade - Unit Tests', () => {
       db
         .close()
         .then(() => {
-          expect(mongoose.connection.removeAllListeners).to.have.been.calledOnce // eslint-disable-line
-          expect(mongoose.connection.close).to.have.been.calledOnce // eslint-disable-line
+          expect(mongoose.connection.removeAllListeners).to.have.been.callCount(1)
+          expect(mongoose.connection.close).to.have.been.callCount(1)
 
           done()
         })
@@ -96,10 +96,10 @@ describe('Mongoose DB Connection Facade - Unit Tests', () => {
       db
         .connect()
         .then(connection => {
-          expect(mongoose.connect).to.have.been.calledOnce // eslint-disable-line
-          expect(db.connect).to.have.been.calledOnce // eslint-disable-line
-          expect(db.beforeConnection).to.have.been.calledOnce // eslint-disable-line
-          expect(db.onConnectionSuccess).to.have.been.calledOnce // eslint-disable-line
+          expect(mongoose.connect).to.have.been.callCount(1)
+          expect(db.connect).to.have.been.callCount(1)
+          expect(db.beforeConnection).to.have.been.callCount(1)
+          expect(db.onConnectionSuccess).to.have.been.callCount(1)
           expect(connection).to.equal(mongoose.connection)
 
           return db.close() // this will clean the dbInstance
@@ -125,10 +125,10 @@ describe('Mongoose DB Connection Facade - Unit Tests', () => {
           return db.connect()
         })
         .then(connection => {
-          expect(mongoose.connect).to.have.been.calledOnce // eslint-disable-line
-          expect(db.connect).to.have.been.calledTwice // eslint-disable-line
-          expect(db.beforeConnection).to.have.been.calledOnce // eslint-disable-line
-          expect(db.onConnectionSuccess).to.have.been.calledOnce // eslint-disable-line
+          expect(mongoose.connect).to.have.been.callCount(1)
+          expect(db.connect).to.have.been.callCount(2)
+          expect(db.beforeConnection).to.have.been.callCount(1)
+          expect(db.onConnectionSuccess).to.have.been.callCount(1)
           expect(connection).to.equal(mongoose.connection)
 
           return db.close() // this will clean the dbInstance
@@ -153,11 +153,11 @@ describe('Mongoose DB Connection Facade - Unit Tests', () => {
           done(new Error('mongoose.connect was supposed to fail'))
         })
         .catch(err => {
-          expect(mongoose.connect).to.have.been.calledOnce // eslint-disable-line
-          expect(db.connect).to.have.been.calledOnce // eslint-disable-line
-          expect(db.beforeConnection).to.have.been.calledOnce // eslint-disable-line
-          expect(db.onConnectionSuccess).to.not.have.been.called // eslint-disable-line
-          expect(db.onConnectionError).to.have.been.calledOnce // eslint-disable-line
+          expect(mongoose.connect).to.have.been.callCount(1)
+          expect(db.connect).to.have.been.callCount(1)
+          expect(db.beforeConnection).to.have.been.callCount(1)
+          expect(db.onConnectionSuccess).to.have.been.callCount(0)
+          expect(db.onConnectionError).to.have.been.callCount(1)
           expect(err).to.match(/Fake mongoose error/)
           done()
         })
@@ -196,14 +196,14 @@ describe('Mongoose DB Connection Facade - Unit Tests', () => {
             mongoose.connection.emit('error', new Error('Fake error connection.'))
           }
 
-          expect(db.onConnecting).to.have.been.calledOnce // eslint-disable-line
-          expect(db.onConnected).to.have.been.calledOnce // eslint-disable-line
-          expect(db.onDisconnecting).to.have.been.calledTwice // eslint-disable-line
-          expect(db.onDisconnected).to.have.been.calledTwice // eslint-disable-line
-          expect(db.onReconnected).to.have.been.calledTwice // eslint-disable-line
-          expect(db.onReconnectFailed).to.have.been.calledTwice // eslint-disable-line
-          expect(db.onClose).to.have.been.calledTwice // eslint-disable-line
-          expect(db.onError).to.have.been.calledTwice // eslint-disable-line
+          expect(db.onConnecting).to.have.been.callCount(1)
+          expect(db.onConnected).to.have.been.callCount(1)
+          expect(db.onDisconnecting).to.have.been.callCount(2)
+          expect(db.onDisconnected).to.have.been.callCount(2)
+          expect(db.onReconnected).to.have.been.callCount(2)
+          expect(db.onReconnectFailed).to.have.been.callCount(2)
+          expect(db.onClose).to.have.been.callCount(2)
+          expect(db.onError).to.have.been.callCount(2)
 
           return db.close() // this will clean the dbInstance
         })

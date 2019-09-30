@@ -253,7 +253,7 @@ describe('API V1 Books Routes - Functional Tests', () => {
         .delete(buildUrl(bookId))
         .then(res => {
           expect(BookService.getInstance().getBookById).to.have.been.calledWith(String(bookId))
-          expect(BookService.getInstance().deleteBookById).not.to.have.been.called // eslint-disable-line
+          expect(BookService.getInstance().deleteBookById).to.have.been.callCount(0)
           expect(res.status).to.equal(404)
           expect(res.body).to.deep.equal({
             status: 'fail',

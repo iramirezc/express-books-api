@@ -54,7 +54,7 @@ describe('Books Middleware - Unit Tests', () => {
             status: 'fail',
             message: `bookId '${bookId}' not found.`
           })
-          expect(next).not.to.have.been.called // eslint-disable-line
+          expect(next).to.have.been.callCount(0)
           done()
         })
         .catch(done)
